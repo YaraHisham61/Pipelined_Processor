@@ -168,7 +168,7 @@ begin
             tempCCR(1) := tempOut(tempOut'left);
           end if;
  when others =>
-   tempCCR(0) := '1';
+tempCCR <='0'
       end case;
     end if;
     CCROut <= tempCCR;

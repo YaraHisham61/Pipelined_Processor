@@ -9,128 +9,194 @@ z2
 !i10f 100
 cModel Technology
 dC:/intelFPGA/20.1
+Ealu
+w1700909030
+DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z0 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z1 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 52
+Z2 dD:/3rd year 1st semester/arch/Architecture_Project
+8D:/3rd year 1st semester/arch/Architecture_Project/ALU.vhd
+FD:/3rd year 1st semester/arch/Architecture_Project/ALU.vhd
+l0
+L7 1
+V`YIj_agIfLc0gh^>Ong>H1
+!s100 `zPH5=Uk?2JIdUFDggYfL1
+Z3 OV;C;2020.1;71
+32
+Z4 !s110 1700910541
+!i10b 1
+!s108 1700910540.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/3rd year 1st semester/arch/Architecture_Project/ALU.vhd|
+!s107 D:/3rd year 1st semester/arch/Architecture_Project/ALU.vhd|
+!i113 1
+Z5 o-work work -2002 -explicit
+Z6 tExplicit 1 CvgOpt 0
+Econtrolunit
+Z7 w1700909847
+R0
+R1
+!i122 53
+R2
+Z8 8D:/3rd year 1st semester/arch/Architecture_Project/controlUnitTraditionalArch.vhd
+Z9 FD:/3rd year 1st semester/arch/Architecture_Project/controlUnitTraditionalArch.vhd
+l0
+L5 1
+VKOOZZ5k3=mO^la?P>i`_O1
+!s100 @[_f?:UM<:IkP8XO1nNoR1
+R3
+32
+R4
+!i10b 1
+Z10 !s108 1700910541.000000
+Z11 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/3rd year 1st semester/arch/Architecture_Project/controlUnitTraditionalArch.vhd|
+Z12 !s107 D:/3rd year 1st semester/arch/Architecture_Project/controlUnitTraditionalArch.vhd|
+!i113 1
+R5
+R6
+Acontrolunittraditionalarch
+R0
+R1
+Z13 DEx4 work 11 controlunit 0 22 KOOZZ5k3=mO^la?P>i`_O1
+!i122 53
+l15
+Z14 L14 165
+Z15 V?XRmchJimNV2:9n2UXlnY2
+Z16 !s100 Vd0`VGU7iLP:=mKAXi1_e1
+R3
+32
+R4
+!i10b 1
+R10
+R11
+R12
+!i113 1
+R5
+R6
 Edff
-Z0 w1700829750
-Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-Z2 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+Z17 w1700829750
+R0
+R1
 !i122 25
-Z3 dC:/Users/20112/Desktop/3rd/Labs/ArchProject
-Z4 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd
-Z5 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd
+Z18 dC:/Users/20112/Desktop/3rd/Labs/ArchProject
+Z19 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd
+Z20 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd
 l0
 L3 1
 VQSH]:T1]BK]0jeH0;6D:Y3
 !s100 YLeeihdEb9TomElf4b24h0
-Z6 OV;C;2020.1;71
+R3
 32
-Z7 !s110 1700837473
+Z21 !s110 1700837473
 !i10b 1
-Z8 !s108 1700837473.000000
-Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd|
-Z10 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd|
+Z22 !s108 1700837473.000000
+Z23 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd|
+Z24 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/d_flip_flop.vhd|
 !i113 1
-Z11 o-work work -2002 -explicit
-Z12 tExplicit 1 CvgOpt 0
+R5
+R6
 Adff_arch
+R0
 R1
-R2
-Z13 DEx4 work 3 dff 0 22 QSH]:T1]BK]0jeH0;6D:Y3
+Z25 DEx4 work 3 dff 0 22 QSH]:T1]BK]0jeH0;6D:Y3
 !i122 25
 l9
 L8 13
 V`R0ZGHANlPggYTHVUQ<Ll2
 !s100 X7f1WY;:iR038CTK7f32F1
-R6
-32
-R7
-!i10b 1
-R8
-R9
-R10
-!i113 1
-R11
-R12
-Eregister32
-Z14 w1700837468
-R1
-R2
-!i122 27
 R3
-Z15 8C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd
-Z16 FC:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd
+32
+R21
+!i10b 1
+R22
+R23
+R24
+!i113 1
+R5
+R6
+Eregister32
+Z26 w1700837468
+R0
+R1
+!i122 27
+R18
+Z27 8C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd
+Z28 FC:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd
 l0
 L4 1
 V17jLncZ:lj;CRA;kM8SRn2
 !s100 <Ib=CkR;`0VT20VOQbji63
-R6
+R3
 32
-Z17 !s110 1700837496
+Z29 !s110 1700837496
 !i10b 1
-Z18 !s108 1700837495.000000
-Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd|
-Z20 !s107 C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd|
+Z30 !s108 1700837495.000000
+Z31 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd|
+Z32 !s107 C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_32bit.vhd|
 !i113 1
-R11
-R12
+R5
+R6
 Aregisterarch
-R13
+R25
+R0
 R1
-R2
-Z21 DEx4 work 10 register32 0 22 17jLncZ:lj;CRA;kM8SRn2
+Z33 DEx4 work 10 register32 0 22 17jLncZ:lj;CRA;kM8SRn2
 !i122 27
 l17
 L14 18
 VEARfD2`KFA195TJbKXo6a1
 !s100 89i;j8a65K8CJ>kGU;=WE0
-R6
-32
-R17
-!i10b 1
-R18
-R19
-R20
-!i113 1
-R11
-R12
-Eregisterfile
-Z22 w1700854731
-R1
-R2
-!i122 41
 R3
-Z23 8C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd
-Z24 FC:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd
+32
+R29
+!i10b 1
+R30
+R31
+R32
+!i113 1
+R5
+R6
+Eregisterfile
+Z34 w1700854731
+R0
+R1
+!i122 41
+R18
+Z35 8C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd
+Z36 FC:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd
 l0
 L3 1
 VDLd6z`R]aAel]:bcEXKZX2
 !s100 kcm[[VL5cmla_EaU?2abP1
-R6
+R3
 32
-Z25 !s110 1700854810
+Z37 !s110 1700854810
 !i10b 1
-Z26 !s108 1700854810.000000
-Z27 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd|
-Z28 !s107 C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd|
+Z38 !s108 1700854810.000000
+Z39 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd|
+Z40 !s107 C:\Users\20112\Desktop\3rd\Labs\ArchProject\register_file.vhd|
 !i113 1
-R11
-R12
+R5
+R6
 Abehavioral
-R21
+R33
+R0
 R1
-R2
-Z29 DEx4 work 12 registerfile 0 22 DLd6z`R]aAel]:bcEXKZX2
+DEx4 work 12 registerfile 0 22 DLd6z`R]aAel]:bcEXKZX2
 !i122 41
 l45
 L18 157
 VNPlhoWbL@jGlDkTdZi[:Y2
 !s100 <OLQL<7dj^:aGT:B7VnN21
-R6
+R3
 32
-R25
+R37
 !i10b 1
-R26
-R27
-R28
+R38
+R39
+R40
 !i113 1
-R11
-R12
+R5
+R6
