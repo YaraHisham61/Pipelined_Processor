@@ -2,14 +2,14 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY SignExtend IS
+ENTITY sign_extension IS
     PORT (
         in_num : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
         out_num : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
-END SignExtend;
+END sign_extension;
 
-ARCHITECTURE SignExtendArch OF SignExtend IS
+ARCHITECTURE SignExtendArch OF sign_extension IS
 signal signed_16bit : signed(15 downto 0);
 signal signed_32bit : signed(31 downto 0);
 BEGIN 

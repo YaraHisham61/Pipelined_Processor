@@ -1,7 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-ENTITY InstMemory IS
+ENTITY instruction_memory IS
     PORT (
         clk : IN STD_LOGIC;
         we : IN STD_LOGIC;
@@ -10,9 +10,9 @@ ENTITY InstMemory IS
         datain : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
         dataout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
     );
-END ENTITY InstMemory;
+END ENTITY instruction_memory;
 
-ARCHITECTURE InstMemoryRtl OF InstMemory IS
+ARCHITECTURE InstMemoryRtl OF instruction_memory IS
     TYPE ram_type IS ARRAY (0 TO 4095) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL ram : ram_type;
 

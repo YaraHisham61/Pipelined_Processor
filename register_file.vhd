@@ -1,6 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-ENTITY RegisterFile IS
+ENTITY register_file IS
     PORT (
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
@@ -13,9 +13,9 @@ ENTITY RegisterFile IS
         Out1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         Out2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
-END RegisterFile;
+END register_file;
 
-ARCHITECTURE Behavioral OF RegisterFile IS
+ARCHITECTURE Behavioral OF register_file IS
     SIGNAL enable0 : STD_LOGIC := '0';
     SIGNAL enable1 : STD_LOGIC := '0';
     SIGNAL enable2 : STD_LOGIC := '0';
@@ -43,7 +43,7 @@ ARCHITECTURE Behavioral OF RegisterFile IS
     SIGNAL writeAddress : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
 
 BEGIN
-    R0 : ENTITY work.Register32
+    R0 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -51,7 +51,7 @@ BEGIN
             inp => reg0,
             outp => output0
         );
-    R1 : ENTITY work.Register32
+    R1 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -59,7 +59,7 @@ BEGIN
             inp => reg1,
             outp => output1
         );
-    R2 : ENTITY work.Register32
+    R2 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -67,7 +67,7 @@ BEGIN
             inp => reg2,
             outp => output2
         );
-    R3 : ENTITY work.Register32
+    R3 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -75,7 +75,7 @@ BEGIN
             inp => reg3,
             outp => output3
         );
-    R4 : ENTITY work.Register32
+    R4 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -83,7 +83,7 @@ BEGIN
             inp => reg4,
             outp => output4
         );
-    R5 : ENTITY work.Register32
+    R5 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -91,7 +91,7 @@ BEGIN
             inp => reg5,
             outp => output5
         );
-    R6 : ENTITY work.Register32
+    R6 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,
@@ -99,7 +99,7 @@ BEGIN
             inp => reg6,
             outp => output6
         );
-    R7 : ENTITY work.Register32
+    R7 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
             rst => rst,

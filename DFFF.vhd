@@ -1,11 +1,11 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-ENTITY DFF IS
+ENTITY DFFF IS
     PORT (
         clk, D, rst, en : IN STD_LOGIC;
         Q : OUT STD_LOGIC);
-END DFF;
-ARCHITECTURE DFF_arch OF DFF IS
+END DFFF;
+ARCHITECTURE DFF_arch OF DFFF IS
 BEGIN
     PROCESS (clk, en, D, rst)
     BEGIN

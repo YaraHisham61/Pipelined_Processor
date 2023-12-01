@@ -1,181 +1,182 @@
-library IEEE;
-  use IEEE.STD_LOGIC_1164.all;
-  use IEEE.STD_LOGIC_ARITH.all;
-  use IEEE.STD_LOGIC_UNSIGNED.all;
-  use IEEE.NUMERIC_STD.all;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
-entity ALU is
-  -- GENERIC (n : integer := 32);
-  port (
-    Reg1, Reg2 : in  std_logic_vector(31 downto 0);
-    Signals    : in  std_logic_vector(3 downto 0);
-    CCR        : in  std_logic_vector(3 downto 0);
-    clk        : in  std_logic;
-    reset      : in  std_logic;
-    RegOut     : out std_logic_vector(31 downto 0);
-    CCROut     : out std_logic_vector(3 downto 0));
-end entity;
+ENTITY ALU IS
+  -- GENERIC (n : integer <= 32);
+  PORT (
+    Reg1, Reg2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    Signals : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    CCR : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    RegOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    CCROut : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+END ENTITY;
 
-architecture archALU of ALU is
-  signal Imm : std_logic_vector(31 downto 0);
-begin
+ARCHITECTURE archALU OF ALU IS
+  SIGNAL Imm : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL tempOut : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL tempCCR : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
+
+BEGIN
   -- Imm <= (to_integer(unsigned(Reg2)) => '1', others => '0');
-  process (clk, reset, Signals)
-    variable tempOut : std_logic_vector(31 downto 0) := (others => '0');
-    variable tempCCR : std_logic_vector(3 downto 0)  := (others => '0');
-  begin
-    if reset = '1' then
-      tempOut := (others => '0');
-      tempCCR := (others => '0');
-    else
-      case Signals is
-        when "0000" =>
+  PROCESS (clk, reset, Signals)
+  BEGIN
+    IF reset = '1' THEN
+      tempOut <= (OTHERS => '0');
+      tempCCR <= (OTHERS => '0');
+    ELSE
+      CASE Signals IS
+        WHEN "0000" =>
           -- NOP
-          tempOut := (others => '0');
-          tempCCR := CCR;
-        when "0001" =>
+          tempOut <= (OTHERS => '0');
+          tempCCR <= CCR;
+        WHEN "0001" =>
           -- NOT
-          if rising_edge(clk) then
-            tempOut := not Reg1;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "0010" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= NOT Reg1;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "0010" =>
           -- NEG
-          if rising_edge(clk) then
-            tempOut := 0 - Reg1;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "0011" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= 0 - Reg1;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "0011" =>
           -- INC
-          if rising_edge(clk) then
-            tempOut := Reg1 + 1;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "0100" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 + 1;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "0100" =>
           -- DEC
-          if rising_edge(clk) then
-            tempOut := Reg1 - 1;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "0101" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 - 1;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "0101" =>
           -- SEWP
-          if rising_edge(clk) then
-            -- SWAP
-          end if;
-        when "0110" =>
+          -- IF rising_edge(clk) THEN
+          -- SWAP
+          -- END IF;
+        WHEN "0110" =>
           -- ADD
-          if rising_edge(clk) then
-            tempOut := Reg1 + Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "0111" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 + Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "0111" =>
           -- ADDI
-          if rising_edge(clk) then
-            tempOut := Reg1 + Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1000" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 + Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1000" =>
           -- SUB
-          if rising_edge(clk) then
-            tempOut := Reg1 - Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1001" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 - Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1001" =>
           -- AND
-          if rising_edge(clk) then
-            tempOut := Reg1 and Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1010" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 AND Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1010" =>
           -- OR
-          if rising_edge(clk) then
-            tempOut := Reg1 or Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1011" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 OR Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1011" =>
           -- XOR
-          if rising_edge(clk) then
-            tempOut := Reg1 xor Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1100" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 XOR Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1100" =>
           -- CMP
-          if rising_edge(clk) then
-            tempOut := Reg1 - Reg2;
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(1) := tempOut(tempOut'left);
-          end if;
-        when "1101" =>
+          -- IF rising_edge(clk) THEN
+          tempOut <= Reg1 - Reg2;
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(1) <= tempOut(tempOut'left);
+          -- END IF;
+        WHEN "1101" =>
           -- BITSET
           -- if rising_edge(clk) then
           --   if Reg2 >= 0 and Reg2 <= 31 then
           --     -- Imm <= to_integer(Reg2(15 downto 0));
-          --     tempCCR(2) := Reg1(imm);
-          --     tempOut(imm) := '1';
+          --     tempCCR(2) <= Reg1(imm);
+          --     tempOut(imm) <= '1';
           --   else
-          --     tempCCR(2) := '0';
+          --     tempCCR(2) <= '0';
           --   end if;
           -- end if;
-        when "1110" =>
+        WHEN "1110" =>
           -- RCL
-          if rising_edge(clk) then
-            if tempOut = "00000000000000000000000000000000" then
-              tempCCR(0) := '1';
-            end if;
-            tempCCR(2) := Reg1(0);
-          end if;
-        when "1111" =>
+          -- IF rising_edge(clk) THEN
+          IF tempOut = "00000000000000000000000000000000" THEN
+            tempCCR(0) <= '1';
+          END IF;
+          tempCCR(2) <= Reg1(0);
+          -- END IF;
+        WHEN "1111" =>
           -- RCR
-          if rising_edge(clk) then
-            --imm no set
-            tempOut := (tempCCR(2) & Reg1(31 downto 1));
-            tempCCR(2) := Reg1(0);
-          end if;
+          -- IF rising_edge(clk) THEN
+          --imm no set
+          tempOut <= (tempCCR(2) & Reg1(31 DOWNTO 1));
+          tempCCR(2) <= Reg1(0);
+          -- END IF;
           -- when "1111" =>
           --   -- LDM
           --   if rising_edge(clk) then
-          --     tempOut := Reg2;
+          --     tempOut <= Reg2;
           --     if tempOut = "00000000000000000000000000000000" then
-          --       tempCCR(0) := '1';
+          --       tempCCR(0) <= '1';
           --     end if;
-          --     tempCCR(1) := tempOut(tempOut'left);
+          --     tempCCR(1) <= tempOut(tempOut'left);
           --   end if;
-        when others => tempCCR(0) := '1';
-      end case;
-    end if;
+        WHEN OTHERS => tempCCR(0) <= '1';
+      END CASE;
+    END IF;
     CCROut <= tempCCR;
     RegOut <= tempOut;
-  end process;
-end architecture;
+  END PROCESS;
+END ARCHITECTURE;
