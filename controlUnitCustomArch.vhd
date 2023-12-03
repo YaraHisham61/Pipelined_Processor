@@ -43,7 +43,7 @@ architecture ControlunitTraditionalArch of CustomControlunit is
    protectAfree<='0';
    protectOfree  <= '1';
    inOout<='0';
-   inAout<="0";
+   inAout<='0';
 
 
    -- Conditions
@@ -124,7 +124,6 @@ end case;
    end if;
     if opcode = "0011010" then-- free write the bit to one and memwrite is raise and the bits not used in th instruction be all zero
      protectAfree  <= '1';
-   end if;
     end if;
     if opcode = "0011011" then-- protect write the bit to be zero
      protectAfree  <= '0';
