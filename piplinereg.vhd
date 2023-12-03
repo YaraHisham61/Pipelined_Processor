@@ -14,7 +14,7 @@ ARCHITECTURE piplineregarch OF piplinereg IS
     SIGNAL enable : STD_LOGIC := '1';
     SIGNAL temp : STD_LOGIC_VECTOR(91 DOWNTO 0) := (OTHERS => '0');
 BEGIN
-        temp <= inp ;
+    temp <= inp;
     dffs : FOR i IN 91 DOWNTO 0 GENERATE
         dff : ENTITY work.DFFF
             PORT MAP(

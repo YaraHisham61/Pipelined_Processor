@@ -8,8 +8,8 @@ ENTITY decoder IS
         weRegFile : IN STD_LOGIC;
         weAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         writeValue : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        fetchDecodeReg : IN STD_LOGIC_VECTOR(91 DOWNTO 0);
-        outDecode : OUT STD_LOGIC_VECTOR(91 DOWNTO 0)
+        inst : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        outDecode : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
 
     );
 END ENTITY decoder;
@@ -47,8 +47,8 @@ ARCHITECTURE decodeArch OF decoder IS
     SIGNAL out1 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL out2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL outMux : STD_LOGIC_VECTOR(6 DOWNTO 0);
-    SIGNAL outControl : STD_LOGIC_VECTOR(18 DOWNTO 0);
-    SIGNAL outDecoder : STD_LOGIC_VECTOR(91 DOWNTO 0);
+    SIGNAL outC : STD_LOGIC_VECTOR(18 DOWNTO 0);
+    SIGNAL outDecoder : STD_LOGIC_VECTOR(63 DOWNTO 0);
 
 BEGIN
     r : register_file PORT MAP(
@@ -56,8 +56,8 @@ BEGIN
         rst => rst,
         RegWrite => weRegFile,
         RegDst => '1',
-        Rsrc1 => fetchDecodeReg (5 DOWNTO 3),
-        Rsrc2 => fetchDecodeReg (8 DOWNTO 6),
+        Rsrc2 => inst (5 DOWNTO 3),
+        Rsrc1 => inst (8 DOWNTO 6),
         Rdst => weAddress,
         WriteData => writeValue,
         Out1 => out1,
@@ -65,11 +65,11 @@ BEGIN
 
     );
     m : mux_2x1 PORT MAP(
-        input_0 => fetchDecodeReg (15 DOWNTO 9),
+        input_0 => inst (15 DOWNTO 9),
         input_1 => "0000000",
-        sel => fetchDecodeReg (91),
+        sel => inst (0),
         outMux => outMux);
 
-    outDecoder <= out1 & out2 & fetchDecodeReg (8 DOWNTO 0);
+    outDecoder <= out2 & out1;
     outDecode <= outDecoder;
 END decodeArch;
