@@ -90,6 +90,6 @@ begin
     );
     
 
-outDecoder  <= out1 & out2 & fetchDecodeReg (8 DOWNTO 0) & outControl; 
+outDecoder  <=   outControl&  fetchDecodeReg (8 DOWNTO 0)&out2&  out1 ; 
 outDecode <= outDecoder;
 end decodeArch;
