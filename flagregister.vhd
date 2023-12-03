@@ -19,7 +19,7 @@ BEGIN
         temp <= inp WHEN '1',
         temp WHEN OTHERS;
     dffs : FOR i IN 3 DOWNTO 0 GENERATE
-        dff : ENTITY work.DFF
+        dff : ENTITY work.DFFF
             PORT MAP(
                 clk => clk,
                 rst => rst,

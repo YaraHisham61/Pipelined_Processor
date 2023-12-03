@@ -41,7 +41,7 @@ architecture ControlunitTraditionalArch of CustomControlunit is
    reg_read2  <= '0';
    reg_write1 <='1';
    protectAfree<='0';
-   protectOfree  <= '1';
+   protectOfree  <= '0';
    inOout<='0';
    inAout<='0';
 
