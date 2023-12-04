@@ -496,33 +496,33 @@ R84
 R85
 R15
 Ememory_unit
-Z86 w1701708960
+Z86 w1701725697
 R3
 R4
 Z87 DPx4 ieee 9 math_real 0 22 gNk<PdFJ<XNPcfef`f?Z81
 R2
 R5
 R6
-!i122 149
+!i122 184
 R0
-Z88 8C:\Users\20112\Desktop\3rd\Labs\ArchProject\memory_unit.vhd
-Z89 FC:\Users\20112\Desktop\3rd\Labs\ArchProject\memory_unit.vhd
+Z88 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/memory_unit.vhd
+Z89 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/memory_unit.vhd
 l0
 L8 1
 VgSH@9fA7T6AEIX<j5RY`Y3
 !s100 C_mC7X9gYbz^zLL>;]]_S3
 R9
 32
-Z90 !s110 1701708962
+Z90 !s110 1701725721
 !i10b 1
-Z91 !s108 1701708962.000000
-Z92 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\20112\Desktop\3rd\Labs\ArchProject\memory_unit.vhd|
-Z93 !s107 C:\Users\20112\Desktop\3rd\Labs\ArchProject\memory_unit.vhd|
+Z91 !s108 1701725721.000000
+Z92 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/memory_unit.vhd|
+Z93 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/memory_unit.vhd|
 !i113 1
 R14
 R15
 Amemorybehaviour
-R62
+Z94 DEx4 work 13 stack_pointer 0 22 5^OebX4G3clWE=e8@d2<?0
 R35
 R3
 R4
@@ -530,12 +530,12 @@ R87
 R2
 R5
 R6
-Z94 DEx4 work 11 memory_unit 0 22 gSH@9fA7T6AEIX<j5RY`Y3
-!i122 149
+Z95 DEx4 work 11 memory_unit 0 22 gSH@9fA7T6AEIX<j5RY`Y3
+!i122 184
 l30
-Z95 L24 42
-Vb9H[850jnk_:>]XeVog[N0
-!s100 CzWaXYomg>gD::<NRHn8>3
+Z96 L24 47
+V`H:n`V<I6oXb`jBBN[UBi0
+!s100 ?QPS3mA_Q@8Fd_hIDGBCI3
 R9
 32
 R90
@@ -547,15 +547,15 @@ R93
 R14
 R15
 Emux_2x1
-Z96 w1701615850
+Z97 w1701615850
 R3
 R4
 R5
 R6
 !i122 79
 R0
-Z97 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd
-Z98 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd
+Z98 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd
+Z99 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd
 l0
 L6 1
 V1F`Q`<oEl;TVCH=^l:lhc2
@@ -565,8 +565,8 @@ R9
 R24
 !i10b 1
 R25
-Z99 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd|
-Z100 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd|
+Z100 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd|
+Z101 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/mux2x1.vhd|
 !i113 1
 R14
 R15
@@ -586,8 +586,8 @@ R9
 R24
 !i10b 1
 R25
-R99
 R100
+R101
 !i113 1
 R14
 R15
@@ -614,13 +614,13 @@ R84
 R85
 R15
 Epiplinereg
-Z101 w1701625140
+Z102 w1701625140
 R5
 R6
 !i122 80
 R0
-Z102 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd
-Z103 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd
+Z103 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd
+Z104 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd
 l0
 L4 1
 V@9b@`kR]_m[[29<YR<M4E2
@@ -630,8 +630,8 @@ R9
 R24
 !i10b 1
 R25
-Z104 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd|
-Z105 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd|
+Z105 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd|
+Z106 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/piplinereg.vhd|
 !i113 1
 R14
 R15
@@ -650,30 +650,53 @@ R9
 R24
 !i10b 1
 R25
-R104
 R105
+R106
 !i113 1
 R14
 R15
 Eregister_32bit
-Z106 w1701344463
+Z107 w1701344463
 R5
 R6
 !i122 105
 R0
-Z107 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd
-Z108 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd
+Z108 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd
+Z109 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd
 l0
 L4 1
 VoGKk03PSk:6LehlSS5F=D3
 !s100 ?YEYGIAM?@bS3ofR=?JSW1
 R9
 32
-Z109 !s110 1701699925
+Z110 !s110 1701699925
 !i10b 1
-Z110 !s108 1701699925.000000
-Z111 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd|
-Z112 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd|
+Z111 !s108 1701699925.000000
+Z112 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd|
+Z113 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_32bit.vhd|
+!i113 1
+R14
+R15
+Astackbehavioural
+w1701721476
+R48
+R5
+R6
+R62
+!i122 163
+Z114 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/stack_pointer.vhd
+Z115 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/stack_pointer.vhd
+l18
+L14 23
+VNIoA>_0e=oR`E3TmhoKlk0
+!s100 [fkkM9DgOAH<ohenhaOhS0
+R9
+32
+!s110 1701721560
+!i10b 1
+!s108 1701721560.000000
+Z116 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/stack_pointer.vhd|
+Z117 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/stack_pointer.vhd|
 !i113 1
 R14
 R15
@@ -689,22 +712,22 @@ VJUm`BIh<CXD0=`@@AI<GP2
 !s100 K=815`Y05k57NWO:4?F292
 R9
 32
-R109
-!i10b 1
 R110
+!i10b 1
 R111
 R112
+R113
 !i113 1
 R14
 R15
 Eregister_file
-Z113 w1701344699
+Z118 w1701344699
 R5
 R6
 !i122 84
 R0
-Z114 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd
-Z115 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd
+Z119 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd
+Z120 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd
 l0
 L3 1
 VNk47d4hl`ci]J;1OUABHj1
@@ -714,8 +737,8 @@ R9
 R10
 !i10b 1
 R11
-Z116 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd|
-Z117 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd|
+Z121 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd|
+Z122 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/register_file.vhd|
 !i113 1
 R14
 R15
@@ -734,20 +757,20 @@ R9
 R10
 !i10b 1
 R11
-R116
-R117
+R121
+R122
 !i113 1
 R14
 R15
 Esign_extension
-Z118 w1701694193
+Z123 w1701694193
 R2
 R5
 R6
 !i122 83
 R0
-Z119 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd
-Z120 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd
+Z124 8C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd
+Z125 FC:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd
 l0
 L5 1
 VLm64<eFSG8W`YA<<dW[ZJ3
@@ -757,8 +780,8 @@ R9
 R24
 !i10b 1
 R25
-Z121 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd|
-Z122 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd|
+Z126 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd|
+Z127 !s107 C:/Users/20112/Desktop/3rd/Labs/ArchProject/sign_extension.vhd|
 !i113 1
 R14
 R15
@@ -777,8 +800,49 @@ R9
 R24
 !i10b 1
 R25
-R121
-R122
+R126
+R127
+!i113 1
+R14
+R15
+Estack_pointer
+Z128 w1701724431
+R5
+R6
+!i122 178
+R0
+R114
+R115
+l0
+L4 1
+V5^OebX4G3clWE=e8@d2<?0
+!s100 hh5>S>9hReVJ2J:jW0^:e1
+R9
+32
+Z129 !s110 1701724455
+!i10b 1
+Z130 !s108 1701724455.000000
+R116
+R117
+!i113 1
+R14
+R15
+Astackbehavioural
+R5
+R6
+R94
+!i122 178
+l18
+L14 17
+V=aHJhfS4oim6]J@YBUKmR3
+!s100 9f?Ln2eJBj@AV5AbhnLKU1
+R9
+32
+R129
+!i10b 1
+R130
+R116
+R117
 !i113 1
 R14
 R15
