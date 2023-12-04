@@ -54,11 +54,11 @@ BEGIN
     PROCESS (clk)
     BEGIN
         IF falling_edge(clk) THEN
-            IF (stackWrite = '1' AND memWrite = '1') THEN
+            IF (stackWrite = '1' AND memWrite = '1') OR branching = '1' THEN
                 stackIn <= stackOut - 2;
                 addressValue <= stackOut(11 DOWNTO 0);
             END IF;
-            IF NOT(stackWrite = '1' AND memWrite = '1') AND NOT (stackRead = '1' AND memRead = '1') THEN
+            IF NOT(stackWrite = '1' AND memWrite = '1') AND NOT (stackRead = '1' AND memRead = '1') AND NOT branching = '1' THEN
                 addressValue <= address(11 DOWNTO 0);
             END IF;
             IF stackRead = '1' AND memRead = '1' THEN
