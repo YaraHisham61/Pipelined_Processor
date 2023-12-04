@@ -1,6 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 ENTITY data_memory IS
     PORT (
         clk : IN STD_LOGIC;
@@ -9,8 +10,9 @@ ENTITY data_memory IS
         we : IN STD_LOGIC;
         re : IN STD_LOGIC;
         address : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        datain : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        dataout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+        datain1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        datain2 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        dataout : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 END ENTITY data_memory;
 
@@ -24,10 +26,13 @@ BEGIN
         IF rising_edge(clk) THEN
             IF (se = '0') THEN
                 IF we = '1' AND ram(to_integer(unsigned(address)))(16) = '0' THEN
-                    ram(to_integer(unsigned(address)))(15 DOWNTO 0) <= datain;
+                    ram(to_integer(unsigned(address)))(15 DOWNTO 0) <= datain1;
+                END IF;
+                IF we = '1' AND ram(to_integer(unsigned(address) + 1))(16) = '0' THEN
+                    ram(to_integer(unsigned(address) + 1))(15 DOWNTO 0) <= datain2;
                 END IF;
                 IF re = '1' THEN
-                    dataout <= ram(to_integer(unsigned((address))))(15 DOWNTO 0);
+                    dataout <= ram(to_integer(unsigned((address) + 1)))(15 DOWNTO 0) & ram(to_integer(unsigned((address))))(15 DOWNTO 0);
                 END IF;
             END IF;
         END IF;

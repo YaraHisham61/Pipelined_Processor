@@ -119,10 +119,10 @@ case opcode is
      reg_write2  <= '1';
    end if;
     if opcode = "0011010" then-- free write the bit to one and memwrite is raise and the bits not used in th instruction be all zero
-     protectAfree  <= '1';
+     protectAfree  <= '0';
     end if;
     if opcode = "0011011" then-- protect write the bit to be zero
-     protectAfree  <= '0';
+     protectAfree  <= '1';
    end if;
 
   IF opcode (6 DOWNTO 1) = "001101" THEN-- protect write the bit to be zero
