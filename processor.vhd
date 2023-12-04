@@ -20,6 +20,7 @@ ARCHITECTURE rtl OF processor IS
     SIGNAL outPipe2 : STD_LOGIC_VECTOR(91 DOWNTO 0) := (OTHERS => '0');
     SIGNAL outControl : STD_LOGIC_VECTOR(18 DOWNTO 0);
     SIGNAL outDecode : STD_LOGIC_VECTOR(63 DOWNTO 0) := (OTHERS => '0');
+    signal outpc :std_logic_vector(31 downto 0);
 
 BEGIN
     inpPipe2 <= outControl & outPipe1(8 DOWNTO 0) & outDecode;
@@ -29,8 +30,8 @@ BEGIN
             rst => rst,
             value => memoryToBranch,
             instruction => inpPipe1(15 DOWNTO 0),
-            valueEnable => memoryEnable
-        );
+            valueEnable => memoryEnable,
+            pcvalue=> outpc        );
     pipe1 : ENTITY work.piplinereg
         PORT MAP(
             clk => clk,
@@ -49,6 +50,9 @@ BEGIN
         PORT MAP(
             clk => clk,
             rst => rst,
+            pc=>outpc,
+            branch =>outControl(2),
+             memwrite=>outControl(3),
             outDecode => outDecode,
             inst => outPipe1 (15 DOWNTO 0),
             weAddress => "101",

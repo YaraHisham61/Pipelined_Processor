@@ -9,6 +9,8 @@ ENTITY decoder IS
         weAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         writeValue : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         inst : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        branch , memwrite: in std_logic;
         outDecode : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
 
     );
@@ -35,6 +37,12 @@ ARCHITECTURE decodeArch OF decoder IS
         sel : IN STD_LOGIC;
         outMux : OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
     END COMPONENT;
+    COMPONENT mux_31x1 IS PORT (
+        input_0 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        input_1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        sel : IN STD_LOGIC;
+        outMux : OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
+    END COMPONENT;
 
     COMPONENT CustomControlunit IS PORT (
         opcode : IN STD_LOGIC_VECTOR (6 DOWNTO 0);
@@ -46,9 +54,12 @@ ARCHITECTURE decodeArch OF decoder IS
 
     SIGNAL out1 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL out2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL outbigmux : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
     SIGNAL outMux : STD_LOGIC_VECTOR(6 DOWNTO 0);
     SIGNAL outC : STD_LOGIC_VECTOR(18 DOWNTO 0);
     SIGNAL outDecoder : STD_LOGIC_VECTOR(63 DOWNTO 0);
+    signal selector:std_logic;
 
 BEGIN
     r : register_file PORT MAP(
@@ -64,12 +75,19 @@ BEGIN
         Out2 => out2
 
     );
+    selector<=branch and memwrite;
     m : mux_2x1 PORT MAP(
         input_0 => inst (15 DOWNTO 9),
         input_1 => "0000000",
         sel => inst (0),
         outMux => outMux);
 
-    outDecoder <= out2 & out1;
+        big: mux_31x1 PORT MAP(
+            input_0 =>out2,
+            input_1 =>pc,
+            sel =>selector ,
+            outMux => outbigmux);
+
+    outDecoder <= outbigmux & out1;
     outDecode <= outDecoder;
 END decodeArch;
