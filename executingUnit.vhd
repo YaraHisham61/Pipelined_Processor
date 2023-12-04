@@ -6,10 +6,12 @@ USE ieee.numeric_std.ALL;
 entity executingUnit is
     port(
 
-    executeWriteback :  out STD_LOGIC_VECTOR(91 DOWNTO 0);
+    executeWriteback :  out STD_LOGIC_VECTOR(31 DOWNTO 0);
+    decodeExecute :  IN STD_LOGIC_VECTOR(63 DOWNTO 0);
+    signalIn :  IN STD_LOGIC_VECTOR(3 DOWNTO 0);
 
-    decodeExecute :  IN STD_LOGIC_VECTOR(91 DOWNTO 0);
-    clk,reset:IN std_logic
+    immvalue:in std_logic_vector(31 downto 0);
+    clk,reset,immediate:IN std_logic
 
     );
 end entity executingUnit;
@@ -25,11 +27,11 @@ PORT (
     RegOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     CCROut : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
  END COMPONENT;
- Component mux_2x1 IS Port ( 
-    input_0 :  IN STD_LOGIC_VECTOR( 6 DOWNTO 0);
-    input_1 : IN STD_LOGIC_VECTOR( 6 DOWNTO 0);
+ Component mux_31x1 IS Port ( 
+    input_0 :  IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
+    input_1 : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
     sel     : in STD_LOGIC;
-    outMux  : out STD_LOGIC_VECTOR( 6 DOWNTO 0));
+    outMux  : out STD_LOGIC_VECTOR( 31 DOWNTO 0));
 END COMPONENT;
  COMPONENT flagregister IS
     PORT (
@@ -43,18 +45,25 @@ END COMPONENT;
 signal aluout :std_logic_vector(31 downto 0);
 signal flagout:std_logic_vector(3 downto 0);
 signal flagin:std_logic_vector(3 downto 0);
-
+signal outmux: std_logic_vector(31 downto 0);
     begin
         A : ALU port map(
             Reg1 => decodeExecute(31 downto 0),
-            Reg2 =>decodeExecute(63 downto 32),
-            Signals =>decodeExecute(91 downto 88),
+            Reg2 =>outmux,
+            Signals =>signalIn,
             CCR =>flagout,
             clk =>clk,
             reset =>reset,
             RegOut =>aluout,
             CCROut =>flagin);
 
+            m:mux_31x1 port map(
+
+            input_0 => decodeExecute(63 downto 32),
+            input_1 =>immvalue,
+            sel     => immediate,
+            outMux  =>outmux
+            );
             F:flagregister port map(
                 clk =>clk,
                 rst =>reset,
@@ -62,7 +71,7 @@ signal flagin:std_logic_vector(3 downto 0);
                 inp =>flagin,
                 outp =>flagout
             );
-            executeWriteback <= aluout&decodeExecute(91 downto 32);
+            executeWriteback <= aluout;
 
 
     end executingArch;
