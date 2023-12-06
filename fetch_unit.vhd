@@ -31,9 +31,8 @@ BEGIN
         );
     IM : ENTITY work.instruction_memory
         PORT MAP(
-            we => '0',
+         clk=>clk,
             address => memLocation(11 DOWNTO 0),
-            datain => (OTHERS => '0'),
             dataout => instruction
         );
     PROCESS (clk)

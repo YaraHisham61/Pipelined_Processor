@@ -5,7 +5,7 @@ library ieee;
 
 entity executingUnit is
   port (
-    executeWriteback      : out STD_LOGIC_VECTOR(31 downto 0);
+    executeWriteback      : out STD_LOGIC_VECTOR(63 downto 0);
     decodeExecute         : in  STD_LOGIC_VECTOR(63 downto 0);
     signalIn              : in  STD_LOGIC_VECTOR(3 downto 0);
     immvalue              : in  std_logic_vector(31 downto 0);
@@ -67,6 +67,6 @@ begin
       inp  => flagin,
       outp => flagout
     );
-  executeWriteback <= aluout;
+  executeWriteback <=outmux &aluout;
 
 end architecture;
