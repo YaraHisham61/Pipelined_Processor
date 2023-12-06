@@ -15,7 +15,7 @@ library ieee;
 
 entity instruction_memory is
   port (
-    clk     : in  std_logic;
+    clk     : in  STD_LOGIC;
     address : in  STD_LOGIC_VECTOR(11 downto 0);
     dataout : out STD_LOGIC_VECTOR(15 downto 0)
   );
@@ -24,7 +24,7 @@ end entity;
 architecture InstMemoryRtl of instruction_memory is
   --   type ram_type is array (0 to 4095) of STD_LOGIC_VECTOR(15 downto 0);
   signal ram  : memory_array(0 to 4095)(15 downto 0);
-  signal init : std_logic := '1';
+  signal init : STD_LOGIC := '1';
   --   signal raminit : memory_array(0 to 4095)(15 downto 0);
 begin
   initialize_memory: process (clk) is
@@ -50,5 +50,4 @@ begin
       dataout <= ram(to_integer(unsigned((address))));
     end if;
   end process;
-
 end architecture;

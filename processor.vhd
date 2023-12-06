@@ -81,7 +81,7 @@ begin
       outDecode  => outDecode,
       inst       => outPipe1(15 downto 0),
       weAddress  => outPipe4(72 downto 70),
-      writeValue => outPipe4(31 downto 0),
+      writeValue => outPipe4(63 downto 32),
       weRegFile  => outPipe4(77),
       yarab      => outPipe2(74)
     );
@@ -120,15 +120,15 @@ begin
   ME: entity work.memory_unit
     port map (clk          => clk,
               rst          => rst,
-              memWrite     => outPipe3(76),
-              memRead      => outPipe3(73),
-              stackWrite   => outPipe3(83),
-              stackRead    => outPipe3(82),
-              protectOfree => outPipe3(85),
-              protectAfree => outPipe3(84),
-              branching    => outPipe3(75),
-              address      => outPipe3(63 downto 32),
-              value        => outPipe3(31 downto 0),
+              memWrite     => inpPipe3(76),
+              memRead      => inpPipe3(73),
+              stackWrite   => inpPipe3(83),
+              stackRead    => inpPipe3(82),
+              protectOfree => inpPipe3(85),
+              protectAfree => inpPipe3(84),
+              branching    => inpPipe3(75),
+              address      => inpPipe3(63 downto 32),
+              value        => inpPipe3(31 downto 0),
               outMemory    => outMemory
     );
   SIX: entity work.sign_extension

@@ -42,9 +42,9 @@ begin
       ss      => protectAfree,
       we      => memWrite
     );
-  with memWrite or memRead or stackWrite or stackRead select
-    outMemory <= value & memoryOut(15 downto 0) & memoryOut(31 downto 16) when '1',
-                 value & address                                          when others;
+  --with memWrite or memRead or stackWrite or stackRead select
+  outMemory <= value & memoryOut;
+  --              value & address                                          when others;
   SP: entity work.stack_pointer
     port map (
       clk  => clk,
@@ -56,7 +56,13 @@ begin
 
   process (clk)
   begin
-    if (rising_edge(clk)) then
+    if (falling_edge(clk)) then
+      --if(memWrite or memRead or stackWrite or stackRead)then
+      --outMemory <= value & memoryOut(15 downto 0) & memoryOut(31 downto 16) ;
+      --end if;
+      --if not(memWrite or memRead or stackWrite or stackRead)then
+      --outMemory<=value & address ;
+      --end if;
       if (stackWrite = '1' and memWrite = '1') or branching = '1' then
         stackIn <= stackOut - 2;
         addressValue <= stackOut(11 downto 0);
