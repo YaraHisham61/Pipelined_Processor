@@ -1,3 +1,4 @@
+
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
@@ -33,7 +34,7 @@ begin
   DM: entity work.data_memory
     port map (
       clk     => clk,
-      address => addressValue,
+      address => address(11 downto 0),
       datain1 => value(31 downto 16),
       datain2 => value(15 downto 0),
       dataout => memoryOut,
@@ -42,9 +43,9 @@ begin
       ss      => protectAfree,
       we      => memWrite
     );
-  --with memWrite or memRead or stackWrite or stackRead select
-  outMemory <= value & memoryOut;
-  --              value & address                                          when others;
+  with memWrite or memRead or stackWrite or stackRead select
+  outMemory <= memoryOut & value when '1' ,
+                 address  &value                                        when others;
   SP: entity work.stack_pointer
     port map (
       clk  => clk,
@@ -54,26 +55,26 @@ begin
       outp => stackOut
     );
 
-  process (clk)
-  begin
-    if (falling_edge(clk)) then
+ -- process (clk)
+--  begin
+ --   if (falling_edge(clk)) then
       --if(memWrite or memRead or stackWrite or stackRead)then
       --outMemory <= value & memoryOut(15 downto 0) & memoryOut(31 downto 16) ;
       --end if;
       --if not(memWrite or memRead or stackWrite or stackRead)then
       --outMemory<=value & address ;
       --end if;
-      if (stackWrite = '1' and memWrite = '1') or branching = '1' then
-        stackIn <= stackOut - 2;
-        addressValue <= stackOut(11 downto 0);
-      end if;
-      if not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' then
-        addressValue <= address(11 downto 0);
-      end if;
-      if stackRead = '1' and memRead = '1' then
-        stackIn <= stackOut + 2;
-        addressValue <= stackOut(11 downto 0);
-      end if;
-    end if;
-  end process;
+ --     if (stackWrite = '1' and memWrite = '1') or branching = '1' then
+  --      stackIn <= stackOut - 2;
+   --     addressValue <= stackOut(11 downto 0);
+--      end if;
+  --    if not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' then
+   --     addressValue <= address(11 downto 0);
+  --    end if;
+  --    if stackRead = '1' and memRead = '1' then
+   --     stackIn <= stackOut + 2;
+    --    addressValue <= stackOut(11 downto 0);
+    --  end if;
+ --   end if;
+ -- end process;
 end architecture;
