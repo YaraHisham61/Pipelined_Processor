@@ -1,68 +1,74 @@
 
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
 
 entity executingUnit is
-    port(
+  port (
+    executeWriteback      : out STD_LOGIC_VECTOR(31 downto 0);
+    decodeExecute         : in  STD_LOGIC_VECTOR(63 downto 0);
+    signalIn              : in  STD_LOGIC_VECTOR(3 downto 0);
+    immvalue              : in  std_logic_vector(31 downto 0);
+    clk, reset, immediate : in  std_logic
+  );
+end entity;
 
-    executeWriteback :  out STD_LOGIC_VECTOR(91 DOWNTO 0);
-
-    decodeExecute :  IN STD_LOGIC_VECTOR(91 DOWNTO 0);
-    clk,reset:IN std_logic
-
+architecture executingArch of executingUnit is
+  component ALU is
+    port (
+      Reg1, Reg2 : in  STD_LOGIC_VECTOR(31 downto 0);
+      Signals    : in  STD_LOGIC_VECTOR(3 downto 0);
+      CCR        : in  STD_LOGIC_VECTOR(3 downto 0);
+      clk        : in  STD_LOGIC;
+      RegOut     : out STD_LOGIC_VECTOR(31 downto 0);
+      CCROut     : out STD_LOGIC_VECTOR(3 downto 0));
+  end component;
+  component mux_31x1 is
+    port (
+      input_0 : in  STD_LOGIC_VECTOR(31 downto 0);
+      input_1 : in  STD_LOGIC_VECTOR(31 downto 0);
+      sel     : in  STD_LOGIC;
+      outMux  : out STD_LOGIC_VECTOR(31 downto 0));
+  end component;
+  component flagregister is
+    port (
+      clk  : in  STD_LOGIC;
+      rst  : in  STD_LOGIC;
+      WE   : in  STD_LOGIC;
+      inp  : in  STD_LOGIC_VECTOR(3 downto 0);
+      outp : out STD_LOGIC_VECTOR(3 downto 0)
     );
-end entity executingUnit;
+  end component;
+  signal aluout  : std_logic_vector(31 downto 0);
+  signal flagout : std_logic_vector(3 downto 0);
+  signal flagin  : std_logic_vector(3 downto 0);
+  signal outmux  : std_logic_vector(31 downto 0);
+begin
+  A: ALU
+    port map (
+      Reg1    => decodeExecute(31 downto 0),
+      Reg2    => outmux,
+      Signals => signalIn,
+      CCR     => flagin,
+      clk     => clk,
+      RegOut  => aluout,
+      CCROut  => flagout);
 
-architecture executingArch of executingUnit IS
-COMPONENT ALU IS
-PORT (
-    Reg1, Reg2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    Signals : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-    CCR : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-    clk : IN STD_LOGIC;
-    reset : IN STD_LOGIC;
-    RegOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    CCROut : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
- END COMPONENT;
- Component mux_2x1 IS Port ( 
-    input_0 :  IN STD_LOGIC_VECTOR( 6 DOWNTO 0);
-    input_1 : IN STD_LOGIC_VECTOR( 6 DOWNTO 0);
-    sel     : in STD_LOGIC;
-    outMux  : out STD_LOGIC_VECTOR( 6 DOWNTO 0));
-END COMPONENT;
- COMPONENT flagregister IS
-    PORT (
-        clk : IN STD_LOGIC;
-        rst : IN STD_LOGIC;
-        WE : IN STD_LOGIC;
-        inp : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-        outp : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+  m: mux_31x1
+    port map (
+      input_0 => decodeExecute(63 downto 32),
+      input_1 => immvalue,
+      sel     => immediate,
+      outMux  => outmux
     );
-END COMPONENT;
-signal aluout :std_logic_vector(31 downto 0);
-signal flagout:std_logic_vector(3 downto 0);
-signal flagin:std_logic_vector(3 downto 0);
+  F: flagregister
+    port map (
+      clk  => clk,
+      rst  => reset,
+      WE   => '1',
+      inp  => flagin,
+      outp => flagout
+    );
+  executeWriteback <= aluout;
 
-    begin
-        A : ALU port map(
-            Reg1 => decodeExecute(31 downto 0),
-            Reg2 =>decodeExecute(63 downto 32),
-            Signals =>decodeExecute(91 downto 88),
-            CCR =>flagout,
-            clk =>clk,
-            reset =>reset,
-            RegOut =>aluout,
-            CCROut =>flagin);
-
-            F:flagregister port map(
-                clk =>clk,
-                rst =>reset,
-                WE =>'1',
-                inp =>flagin,
-                outp =>flagout
-            );
-            executeWriteback <= aluout&decodeExecute(91 downto 32);
-
-
-    end executingArch;
+end architecture;

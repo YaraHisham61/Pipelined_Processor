@@ -11,7 +11,8 @@ ENTITY fetch_unit IS
         rst : IN STD_LOGIC;
         valueEnable : IN STD_LOGIC;
         value : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-        instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+        instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        pcvalue:out std_logic_vector(31 downto 0)
 
     );
 END ENTITY fetch_unit;
@@ -45,6 +46,7 @@ BEGIN
                 reg <= value;
             END IF;
         END IF;
+        pcvalue<=memLocation;
     END PROCESS;
 
 END ARCHITECTURE;
