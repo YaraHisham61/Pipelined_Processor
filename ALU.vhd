@@ -13,7 +13,6 @@ entity ALU is
     Reg1, Reg2 : in  STD_LOGIC_VECTOR(31 downto 0);
     Signals    : in  STD_LOGIC_VECTOR(3 downto 0);
     CCR        : in  STD_LOGIC_VECTOR(3 downto 0);
-    clk        : in  STD_LOGIC;
     RegOut     : out STD_LOGIC_VECTOR(31 downto 0);
     CCROut     : out STD_LOGIC_VECTOR(3 downto 0));
 end entity;
