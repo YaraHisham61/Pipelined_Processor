@@ -1,5 +1,17 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+-- use IEEE.STD_LOGIC_UNSIGNED.all;
+
+PACKAGE registerPkg IS
+    TYPE memory_array IS ARRAY (NATURAL RANGE <>) OF STD_LOGIC_VECTOR;
+END PACKAGE;
+USE work.iipkg.ALL;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_textio.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.numeric_std.ALL;
+USE std.textio.ALL;
 ENTITY register_file IS
     PORT (
         clk : IN STD_LOGIC;
@@ -16,14 +28,15 @@ ENTITY register_file IS
 END register_file;
 
 ARCHITECTURE Behavioral OF register_file IS
-    SIGNAL enable0 : STD_LOGIC := '0';
-    SIGNAL enable1 : STD_LOGIC := '0';
-    SIGNAL enable2 : STD_LOGIC := '0';
-    SIGNAL enable3 : STD_LOGIC := '0';
-    SIGNAL enable4 : STD_LOGIC := '0';
-    SIGNAL enable5 : STD_LOGIC := '0';
-    SIGNAL enable6 : STD_LOGIC := '0';
-    SIGNAL enable7 : STD_LOGIC := '0';
+    SIGNAL init : STD_LOGIC := '1';
+    SIGNAL enable0 : STD_LOGIC := '1';
+    SIGNAL enable1 : STD_LOGIC := '1';
+    SIGNAL enable2 : STD_LOGIC := '1';
+    SIGNAL enable3 : STD_LOGIC := '1';
+    SIGNAL enable4 : STD_LOGIC := '1';
+    SIGNAL enable5 : STD_LOGIC := '1';
+    SIGNAL enable6 : STD_LOGIC := '1';
+    SIGNAL enable7 : STD_LOGIC := '1';
     SIGNAL reg0 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     SIGNAL reg1 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     SIGNAL reg2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -43,6 +56,7 @@ ARCHITECTURE Behavioral OF register_file IS
     SIGNAL writeAddress : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
 
 BEGIN
+
     R0 : ENTITY work.register_32bit
         PORT MAP(
             clk => clk,
@@ -130,7 +144,38 @@ BEGIN
         writeAddress <= Rdst WHEN '1',
         Rsrc2 WHEN OTHERS;
     sync : PROCESS (clk)
+        FILE register_file : text OPEN READ_MODE IS "registers.txt";
+        VARIABLE file_line : line;
+        VARIABLE temp_data : STD_LOGIC_VECTOR(31 DOWNTO 0);
     BEGIN
+        IF (init = '1') THEN
+            IF NOT endfile(register_file) THEN
+                FOR i IN 0 TO 7 LOOP
+                    readline(register_file, file_line);
+                    read(file_line, temp_data);
+                    CASE i IS
+                        WHEN 0 =>
+                            reg0 <= temp_data;
+                        WHEN 1 =>
+                            reg1 <= temp_data;
+                        WHEN 2 =>
+                            reg2 <= temp_data;
+                        WHEN 3 =>
+                            reg3 <= temp_data;
+                        WHEN 4 =>
+                            reg4 <= temp_data;
+                        WHEN 5 =>
+                            reg5 <= temp_data;
+                        WHEN 6 =>
+                            reg6 <= temp_data;
+                        WHEN 7 =>
+                            reg7 <= temp_data;
+                    END CASE;
+                END LOOP;
+                init <= '0';
+            END IF;
+            file_close(register_file); -- Move file closing outside the loop
+        END IF;
         IF falling_edge(clk) THEN
             enable0 <= '0';
             enable1 <= '0';
@@ -142,6 +187,34 @@ BEGIN
             enable7 <= '0';
             IF (RegWrite = '1') THEN
                 CASE writeAddress IS
+                    WHEN "000" =>
+                        enable0 <= '1';
+                        reg0 <= WriteData;
+                    WHEN "001" =>
+                        enable1 <= '1';
+                        reg1 <= WriteData;
+                    WHEN "010" =>
+                        enable2 <= '1';
+                        reg2 <= WriteData;
+                    WHEN "011" =>
+                        enable3 <= '1';
+                        reg3 <= WriteData;
+                    WHEN "100" =>
+                        enable4 <= '1';
+                        reg4 <= WriteData;
+                    WHEN "101" =>
+                        enable5 <= '1';
+                        reg5 <= WriteData;
+                    WHEN "110" =>
+                        enable6 <= '1';
+                        reg6 <= WriteData;
+                    WHEN OTHERS =>
+                        enable7 <= '1';
+                        reg7 <= WriteData;
+                END CASE;
+            END IF;
+            IF (RegWrite = '0') THEN
+                CASE Rsrc1 IS
                     WHEN "000" =>
                         enable0 <= '1';
                         reg0 <= WriteData;
