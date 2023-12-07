@@ -81,8 +81,9 @@ case opcode is
 
       WHEN OTHERS =>
         alu_op <= "0000";
-
     END CASE;
+if(opcode (6 downto 2)="00101")then  inOout<='1';end if;
+if(opcode="0010100")then  inAout<='1';end if;
 
     if opcode(6 downto 4)="000" or opcode="1010001" or opcode="0101110" or opcode (6 downto 3)="0011" or opcode (6 downto 1)="001010" or opcode="0010111" then
     reg_write1 <='0';

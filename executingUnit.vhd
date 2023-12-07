@@ -9,11 +9,15 @@ entity executingUnit is
     decodeExecute         : in  STD_LOGIC_VECTOR(63 downto 0);
     signalIn              : in  STD_LOGIC_VECTOR(3 downto 0);
     immvalue              : in  std_logic_vector(31 downto 0);
-    clk, reset, immediate : in  std_logic
+    clk, reset, immediate : in  std_logic;
+    outwrite: in std_logic;
+    readport:in std_logic
   );
 end entity;
 
 architecture executingArch of executingUnit is
+  signal inport : std_logic_vector(31 downto 0);
+  signal outexe : std_logic_vector(31 downto 0);
   component ALU is
     port (
       Reg1, Reg2 : in  STD_LOGIC_VECTOR(31 downto 0);
@@ -51,6 +55,13 @@ begin
       CCR     => flagin,
       RegOut  => aluout,
       CCROut  => flagout);
+outport:ENTITY work.register_32bit 
+PORT map(
+    clk =>clk,
+    rst => reset,
+    WE =>outwrite,
+    inp => decodeExecute(31 downto 0),
+    outp =>inport);
 
   m: mux_31x1
     port map (
@@ -58,6 +69,13 @@ begin
       input_1 => immvalue,
       sel     => immediate,
       outMux  => outmux
+    );
+    mout: mux_31x1
+    port map (
+      input_0 => aluout,
+      input_1 => inport,
+      sel     => readport,
+      outMux  => outexe
     );
   F: flagregister
     port map (
@@ -67,6 +85,6 @@ begin
       inp  => flagin,
       outp => flagout
     );
-  executeWriteback <=outmux &aluout;
+  executeWriteback <=outmux &outexe;
 
 end architecture;

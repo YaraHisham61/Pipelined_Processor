@@ -33,7 +33,7 @@ architecture rtl of processor is
 begin
              inpPipe2              <= outControl & outPipe1(8 downto 0) & outDecode;
              inpPipe3              <= outPipe2(91 downto 64) & outExcute;
-             inpPipe4              <= outPipe3(91 downto 64) & outMemory(31 downto 0) & outMemory(63 downto 32);
+             inpPipe4              <= outPipe3(91 downto 64) & outMemory ;
              inpPipe1(15 downto 0) <= outFetch;
   FU: entity work.fetch_unit
       port map (
@@ -81,7 +81,7 @@ begin
       outDecode  => outDecode,
       inst       => outPipe1(15 downto 0),
       weAddress  => outPipe4(72 downto 70),
-      writeValue => outPipe4(63 downto 32),
+      writeValue => outPipe4(31 downto 0),
       weRegFile  => outPipe4(77),
       yarab      => outPipe2(74)
     );
@@ -115,7 +115,9 @@ begin
       immvalue         => outExtend,
       clk              => clk,
       reset            => rst,
-      immediate        => outPipe2(74)
+      immediate        => outPipe2(74),
+      outwrite =>outPipe2(86),
+      readport=>outPipe2(87)
     );
   ME: entity work.memory_unit
     port map (clk          => clk,
@@ -127,8 +129,8 @@ begin
               protectOfree => outPipe3(85),
               protectAfree => outPipe3(84),
               branching    => outPipe3(75),
-              address      => inpPipe3(63 downto 32),
-              value        => inpPipe3(31 downto 0),
+              address      => outPipe3(63 downto 32),
+              value        => outPipe3(31 downto 0),
               outMemory    => outMemory
     );
   SIX: entity work.sign_extension

@@ -44,8 +44,8 @@ begin
       we      => memWrite
     );
   with memWrite or memRead or stackWrite or stackRead select
-  outMemory <= memoryOut & value when '1' ,
-                 address  &value                                        when others;
+  outMemory <=value& memoryOut  when '1' ,
+           address& value                                          when others;
   SP: entity work.stack_pointer
     port map (
       clk  => clk,
