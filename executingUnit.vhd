@@ -46,7 +46,10 @@ architecture executingArch of executingUnit is
   signal flagout : std_logic_vector(3 downto 0);
   signal flagin  : std_logic_vector(3 downto 0);
   signal outmux  : std_logic_vector(31 downto 0);
+  signal outCCRCR : std_logic_vector(3 downto 0);
+
 begin
+outCCRCR<=flagout;
   A: ALU
     port map (
       Reg1    => decodeExecute(31 downto 0),
@@ -82,8 +85,8 @@ PORT map(
       clk  => clk,
       rst  => reset,
       WE   => '1',
-      inp  => flagin,
-      outp => flagout
+      inp  => flagout,
+      outp => flagin
     );
   executeWriteback <=outmux &outexe;
 

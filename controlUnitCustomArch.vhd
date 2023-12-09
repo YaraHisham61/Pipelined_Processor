@@ -88,7 +88,7 @@ if(opcode="0010100")then  inAout<='1';end if;
     if opcode(6 downto 4)="000" or opcode="1010001" or opcode="0101110" or opcode (6 downto 3)="0011" or opcode (6 downto 1)="001010" or opcode="0010111" then
     reg_write1 <='0';
     end if;
-   if opcode(6 downto 4) = "000" or opcode(6 downto 1) = "101111" or opcode ="0010110" or opcode (6 downto 1)="001010"   then
+   if opcode(6 downto 4) = "000" or opcode(6 downto 1) = "101111" or opcode ="0010110" or opcode (6 downto 1)="001010" or opcode(6 downto 3) ="0011"  then
      reg_read1  <= '0';
    end if;
  

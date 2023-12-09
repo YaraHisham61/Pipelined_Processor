@@ -216,28 +216,28 @@ BEGIN
             IF (RegWrite = '0') THEN
                 CASE Rsrc1 IS
                     WHEN "000" =>
-                        enable0 <= '1';
+                      
                         reg0 <= WriteData;
                     WHEN "001" =>
-                        enable1 <= '1';
+                       
                         reg1 <= WriteData;
                     WHEN "010" =>
-                        enable2 <= '1';
+                        
                         reg2 <= WriteData;
                     WHEN "011" =>
-                        enable3 <= '1';
+                        
                         reg3 <= WriteData;
                     WHEN "100" =>
-                        enable4 <= '1';
+                        
                         reg4 <= WriteData;
                     WHEN "101" =>
-                        enable5 <= '1';
+                       
                         reg5 <= WriteData;
                     WHEN "110" =>
-                        enable6 <= '1';
+                       
                         reg6 <= WriteData;
                     WHEN OTHERS =>
-                        enable7 <= '1';
+                      
                         reg7 <= WriteData;
                 END CASE;
             END IF;

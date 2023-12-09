@@ -43,29 +43,14 @@ begin
                                                               tempReg1 xor tempReg2 when Signals = "1010" else
                                                               tempReg1 - tempReg2   when Signals = "1011" else
                                                   (others => '0');
-
-  aluu: process (Signals, Reg1, Reg2, CCR, tempOut)
-  begin
-    if (Signals = "0000") then
-      RegOut <= tempOut(31 downto 0);
-    else
-      CCROut(0) <= '1' when tempOut(31 downto 0) = "00000000000000000000000000000000"
-    else
-      '0';
-      CCROut(1) <= tempOut(31);
-      CCROut(3) <= '0';
-      case Signals is
-        when "0011" =>
-          CCROut(2) <= tempOut(32);
-        when "0100" =>
-          CCROut(2) <= tempOut(32);
-        when "0101" =>
-          CCROut(2) <= tempOut(32);
-        when "0110" =>
-          CCROut(2) <= tempOut(32);
-        when others => CCROut(2) <= '0';
-      end case;
-      RegOut <= tempOut(31 downto 0);
-    end if;
-  end process;
+  RegOut    <= tempOut(31 downto 0);
+   
+  CCROut(0) <= '1' when tempOut(31 downto 0) = "00000000000000000000000000000000" else '0';
+  CCROut(1) <= tempOut(31);
+  CCROut(3) <= '0';
+  CCROut(2) <= tempOut(32) when Signals = "0110" else 
+               tempOut(32) when Signals = "0111" else
+               tempOut(32) when Signals = "1011" else
+               '0';
+CCROut<=CCR when Signals="0000";
 end architecture;
