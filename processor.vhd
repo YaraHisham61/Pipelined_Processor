@@ -5,36 +5,40 @@ library ieee;
 
 entity processor is
   port (
-    clk : in STD_LOGIC;
-    rst : in STD_LOGIC
+    clk     : in  STD_LOGIC;
+    rst     : in  STD_LOGIC;
+    inPort  : in  STD_LOGIC_VECTOR(31 downto 0);
+    outPort : out STD_LOGIC_VECTOR(31 downto 0)
   );
 end entity;
 
 architecture rtl of processor is
   signal memoryToBranch : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-
-  signal memoryEnable : STD_LOGIC                     := '0';
-  signal inpPipe1     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal outPipe1     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal inpPipe2     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal outPipe2     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal inpPipe3     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal outPipe3     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal inpPipe4     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal outPipe4     : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
-  signal outControl   : STD_LOGIC_VECTOR(18 downto 0);
-  signal outDecode    : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
-  signal outMemory    : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
-  signal outExcute    : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
-  signal outFetch     : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
-  signal outExtend    : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-  signal outpc        : std_logic_vector(31 downto 0);
+  signal memoryEnable   : STD_LOGIC                     := '0';
+  signal inpPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal outPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal inpPipe2       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal outPipe2       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal inpPipe3       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal outPipe3       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal inpPipe4       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal outPipe4       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
+  signal outControl     : STD_LOGIC_VECTOR(18 downto 0);
+  signal outDecode      : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
+  signal outMemory      : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
+  signal outExcute      : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
+  signal outFetch       : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+  signal outExtend      : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+  signal outpc          : std_logic_vector(31 downto 0);
+  signal inPortsig      : std_logic_vector(31 downto 0);
+  signal outsig         : std_logic;
 
 begin
-             inpPipe2              <= outControl & outPipe1(8 downto 0) & outDecode;
-             inpPipe3              <= outPipe2(91 downto 64) & outExcute;
-             inpPipe4              <= outPipe3(91 downto 64) & outMemory ;
-             inpPipe1(15 downto 0) <= outFetch;
+             inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode;
+             inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
+             inpPipe3(31 downto 0)  <= outPipe2(31 downto 0);
+             inpPipe4               <= outPipe3(91 downto 64) & outMemory;
+             inpPipe1(15 downto 0)  <= outFetch;
   FU: entity work.fetch_unit
       port map (
       clk         => clk,
@@ -73,17 +77,20 @@ begin
     );
   ID: entity work.decoder
     port map (
-      clk        => clk,
-      rst        => rst,
-      pc         => outpc,
-      branch     => outControl(2),
-      memwrite   => outControl(3),
-      outDecode  => outDecode,
-      inst       => outPipe1(15 downto 0),
-      weAddress  => outPipe4(72 downto 70),
-      writeValue => outPipe4(31 downto 0),
-      weRegFile  => outPipe4(77),
-      yarab      => outPipe2(74)
+      clk         => clk,
+      rst         => rst,
+      pc          => outpc,
+      branch      => outControl(2),
+      memwrite    => outControl(3),
+      outDecode   => outDecode,
+      inst        => outPipe1(15 downto 0),
+      weAddress   => outPipe4(72 downto 70),
+      weAddress2  => outPipe4(66 downto 64),
+      writeValue  => outPipe4(31 downto 0),
+      writeValue2 => outPipe4(63 downto 32),
+      weRegFile   => outPipe4(77),
+      weRegFile2  => outPipe4(78),
+      yarab       => outPipe2(74)
     );
 
   CU: entity work.CustomControlunit
@@ -115,9 +122,7 @@ begin
       immvalue         => outExtend,
       clk              => clk,
       reset            => rst,
-      immediate        => outPipe2(74),
-      outwrite =>outPipe2(86),
-      readport=>outPipe2(87)
+      immediate        => outPipe2(74)
     );
   ME: entity work.memory_unit
     port map (clk          => clk,
@@ -138,5 +143,13 @@ begin
               in_num  => outPipe1(15 downto 0),
               out_num => outExtend
     );
-
+                  outport <= outPipe2(31 downto 0) when outPipe2(87) = '1';
+                  outsig  <= not outPipe2(87) and outPipe2(86);
+  portout: entity work.mux_31x1
+      port map (
+      input_0 => outExcute(31 downto 0),
+      input_1 => inPort,
+      sel     => outsig,
+      outMux  => inPortsig
+    );
 end architecture;

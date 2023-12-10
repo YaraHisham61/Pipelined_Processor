@@ -31,10 +31,17 @@ architecture memoryBehaviour of memory_unit is
   signal stackOut     : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal addressValue : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 begin
+  addressValue <= stackOut(11 downto 0) when (stackWrite = '1' and memWrite = '1') or branching = '1' else
+                  address(11 downto 0)  when not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' else
+                  stackOut(11 downto 0) when stackRead = '1' and memRead = '1';
+
+  stackIn <= stackOut - 2 when (stackWrite = '1' and memWrite = '1') or branching = '1' else
+             stackOut + 2 when stackRead = '1' and memRead = '1' else
+             stackIn;
   DM: entity work.data_memory
     port map (
       clk     => clk,
-      address => address(11 downto 0),
+      address => addressValue,
       datain1 => value(31 downto 16),
       datain2 => value(15 downto 0),
       dataout => memoryOut,
@@ -44,8 +51,8 @@ begin
       we      => memWrite
     );
   with memWrite or memRead or stackWrite or stackRead select
-  outMemory <=value& memoryOut  when '1' ,
-           address& value                                          when others;
+    outMemory <= value & memoryOut when '1',
+                 address & value   when others;
   SP: entity work.stack_pointer
     port map (
       clk  => clk,
@@ -55,26 +62,18 @@ begin
       outp => stackOut
     );
 
- -- process (clk)
---  begin
- --   if (falling_edge(clk)) then
-      --if(memWrite or memRead or stackWrite or stackRead)then
-      --outMemory <= value & memoryOut(15 downto 0) & memoryOut(31 downto 16) ;
-      --end if;
-      --if not(memWrite or memRead or stackWrite or stackRead)then
-      --outMemory<=value & address ;
-      --end if;
- --     if (stackWrite = '1' and memWrite = '1') or branching = '1' then
-  --      stackIn <= stackOut - 2;
-   --     addressValue <= stackOut(11 downto 0);
---      end if;
-  --    if not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' then
-   --     addressValue <= address(11 downto 0);
-  --    end if;
-  --    if stackRead = '1' and memRead = '1' then
-   --     stackIn <= stackOut + 2;
-    --    addressValue <= stackOut(11 downto 0);
-    --  end if;
- --   end if;
- -- end process;
+  -- process (all)
+  -- begin
+  --   if (stackWrite = '1' and memWrite = '1') or branching = '1' then
+  --     addressValue <= stackOut(11 downto 0);
+  --     stackIn <= stackOut - 2;
+  --   end if;
+  --   if not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' then
+  --     addressValue <= address(11 downto 0);
+  --   end if;
+  --   if stackRead = '1' and memRead = '1' then
+  --     stackIn <= stackOut + 2;
+  --     addressValue <= stackOut(11 downto 0);
+  --   end if;
+  -- end process;
 end architecture;

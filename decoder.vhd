@@ -7,8 +7,11 @@ entity decoder is
     clk              : in  STD_LOGIC;
     rst              : in  STD_LOGIC;
     weRegFile        : in  STD_LOGIC;
+    weRegFile2       : in  STD_LOGIC;
     weAddress        : in  STD_LOGIC_VECTOR(2 downto 0);
+    weAddress2       : in  STD_LOGIC_VECTOR(2 downto 0);
     writeValue       : in  STD_LOGIC_VECTOR(31 downto 0);
+    writeValue2      : in  STD_LOGIC_VECTOR(31 downto 0);
     inst             : in  STD_LOGIC_VECTOR(15 downto 0);
     pc               : in  STD_LOGIC_VECTOR(31 downto 0);
     branch, memwrite : in  std_logic;
@@ -20,16 +23,20 @@ end entity;
 architecture decodeArch of decoder is
   component register_file is
     port (
-      clk       : in  STD_LOGIC;
-      rst       : in  STD_LOGIC;
-      RegWrite  : in  STD_LOGIC;
-      RegDst    : in  STD_LOGIC;
-      Rsrc1     : in  STD_LOGIC_VECTOR(2 downto 0);
-      Rsrc2     : in  STD_LOGIC_VECTOR(2 downto 0);
-      Rdst      : in  STD_LOGIC_VECTOR(2 downto 0);
-      WriteData : in  STD_LOGIC_VECTOR(31 downto 0);
-      Out1      : out STD_LOGIC_VECTOR(31 downto 0);
-      Out2      : out STD_LOGIC_VECTOR(31 downto 0));
+      clk        : in  STD_LOGIC;
+      rst        : in  STD_LOGIC;
+      RegWrite   : in  STD_LOGIC;
+      RegWrite2  : in  STD_LOGIC;
+      RegDst     : in  STD_LOGIC;
+      Rsrc1      : in  STD_LOGIC_VECTOR(2 downto 0);
+      Rsrc2      : in  STD_LOGIC_VECTOR(2 downto 0);
+      Rdst       : in  STD_LOGIC_VECTOR(2 downto 0);
+      Rdst2      : in  STD_LOGIC_VECTOR(2 downto 0);
+      WriteData  : in  STD_LOGIC_VECTOR(31 downto 0);
+      WriteData2 : in  STD_LOGIC_VECTOR(31 downto 0);
+      Out1       : out STD_LOGIC_VECTOR(31 downto 0);
+      Out2       : out STD_LOGIC_VECTOR(31 downto 0)
+    );
   end component;
 
   component mux_2x1 is
@@ -68,16 +75,19 @@ architecture decodeArch of decoder is
 begin
   r: register_file
     port map (
-      clk       => clk,
-      rst       => rst,
-      RegWrite  => weRegFile,
-      RegDst    => '1',
-      Rsrc2     => inst(2 downto 0),
-      Rsrc1     => inst(5 downto 3),
-      Rdst      => weAddress,
-      WriteData => writeValue,
-      Out1      => out1,
-      Out2      => out2
+      clk        => clk,
+      rst        => rst,
+      RegWrite   => weRegFile,
+      RegWrite2  => weRegFile2,
+      RegDst     => '1',
+      Rsrc2      => inst(2 downto 0),
+      Rsrc1      => inst(5 downto 3),
+      Rdst       => weAddress,
+      Rdst2      => weAddress2,
+      WriteData  => writeValue,
+      WriteData2 => writeValue2,
+      Out1       => out1,
+      Out2       => out2
     );
      selector <= branch and memwrite;
   m: mux_2x1
