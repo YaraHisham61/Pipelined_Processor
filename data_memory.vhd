@@ -57,7 +57,7 @@ begin
       --   ram(to_integer(unsigned(address) + 1))(15 DOWNTO 0) <= datain2;
       --  END IF;
       if re = '1' then
-        dataout <= ram(to_integer(unsigned((address) + 1)))(15 downto 0) & ram(to_integer(unsigned((address))))(15 downto 0);
+        dataout <= ram(to_integer(unsigned((address))))(15 downto 0) & ram(to_integer(unsigned((address) + 1)))(15 downto 0);
       end if;
     end if;
     if se = '1' then

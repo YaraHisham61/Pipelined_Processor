@@ -19,7 +19,7 @@ entity fetch_unit is
 end entity;
 
 architecture rtl of fetch_unit is
-  signal reg         : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000010000000000000000";
+  signal reg         : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
   signal memLocation : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 begin
   PC: entity work.register_32bit
@@ -41,7 +41,7 @@ begin
   begin
     if falling_edge(clk) then
       if valueEnable = '0' then
-        reg <= (reg(31 downto 16) + 1) &(reg(31 downto 16));
+        reg <= reg + 1;
       end if;
       if valueEnable = '1' then
         reg <= value;

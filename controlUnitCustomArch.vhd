@@ -37,7 +37,7 @@ begin
     reg_write2 <= '0';
     reg_read3 <= '0';
     reg_read2 <= '0';
-    reg_write1 <= '1';
+    reg_write1 <= '0';
     protectAfree <= '0';
     protectOfree <= '0';
     inOout <= '0';
@@ -77,19 +77,18 @@ begin
         alu_op <= "1110"; --rcr "1110"
       when "0011100" =>
         alu_op <= "1111"; --jz "1111" 
-
       when others =>
         alu_op <= "0000";
     end case;
-    if (opcode(6 downto 2) = "00101") then
+    if (opcode(6 downto 1) = "001010") then
       inOout <= '1';
     end if;
     if (opcode = "0010100") then
       inAout <= '1';
     end if;
 
-    if opcode(6 downto 4) = "000" or opcode = "1010001" or opcode = "0101110" or opcode(6 downto 3) = "0011" or opcode = "0010100" or opcode = "0010111" then
-      reg_write1 <= '0';
+    if not (opcode(6 downto 4) = "000" or opcode = "1010001" or opcode = "0101110" or opcode(6 downto 3) = "0011" or opcode = "0010100" or opcode = "0010111") then
+      reg_write1 <= '1';
     end if;
     if opcode(6 downto 4) = "000" or opcode(6 downto 1) = "101111" or opcode = "0010110" or opcode(6 downto 1) = "001010" or opcode(6 downto 3) = "0011" then
       reg_read1 <= '0';

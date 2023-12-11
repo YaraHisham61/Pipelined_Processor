@@ -14,7 +14,7 @@ end entity;
 
 architecture rtl of processor is
   signal memoryToBranch : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-  signal memoryEnable   : STD_LOGIC                     := '0';
+  signal fetch_rst      : STD_LOGIC_VECTOR(15 downto 0);
   signal inpPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
   signal outPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
   signal inpPipe2       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
@@ -32,20 +32,23 @@ architecture rtl of processor is
   signal outpc          : std_logic_vector(31 downto 0);
   signal inPortsig      : std_logic_vector(31 downto 0);
   signal outsig         : std_logic;
+  signal jump           : std_logic;
 
 begin
              inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode;
              inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
-             inpPipe3(31 downto 0)  <= outPipe2(31 downto 0);
+             inpPipe3(31 downto 0)  <= inPortsig;
              inpPipe4               <= outPipe3(91 downto 64) & outMemory;
-             inpPipe1(15 downto 0)  <= outFetch;
+             inpPipe1(15 downto 0)  <= fetch_rst;
+             jump                   <= '1' when outPipe1(15 downto 9) = "0011100" and outControl(2) = '1' else '0';
+             fetch_rst              <= outFetch when jump = '0' else "0000000000000000";
   FU: entity work.fetch_unit
       port map (
       clk         => clk,
       rst         => rst,
-      value       => memoryToBranch,
+      value       => outDecode(31 downto 0),
       instruction => outFetch,
-      valueEnable => memoryEnable,
+      valueEnable => jump,
       pcvalue     => outpc);
   pipe1: entity work.piplinereg
     port map (
