@@ -87,7 +87,7 @@ begin
       inAout <= '1';
     end if;
 
-    if not (opcode(6 downto 4) = "000" or opcode = "1010001" or opcode = "0101110" or opcode(6 downto 3) = "0011" or opcode = "0010100" or opcode = "0010111") then
+    if opcode (6 downto 1)="101111" or opcode ="0010110" or opcode (6 downto 1)="101110" or opcode ="1010000"  or opcode (6 downto 4)="011" or opcode(6 downto 4) ="110" or opcode ="0101111" or opcode ="0010101"  or opcode(6 downto 2) ="00100"then
       reg_write1 <= '1';
     end if;
     if opcode(6 downto 4) = "000" or opcode(6 downto 1) = "101111" or opcode = "0010110" or opcode(6 downto 1) = "001010" or opcode(6 downto 3) = "0011" then

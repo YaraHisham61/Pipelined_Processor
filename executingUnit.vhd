@@ -9,7 +9,8 @@ entity executingUnit is
     decodeExecute         : in  STD_LOGIC_VECTOR(63 downto 0);
     signalIn              : in  STD_LOGIC_VECTOR(3 downto 0);
     immvalue              : in  std_logic_vector(31 downto 0);
-    clk, reset, immediate : in  std_logic
+    clk, reset, immediate : in  std_logic;
+    zeroflag: out std_logic
   );
 end entity;
 
@@ -69,5 +70,6 @@ begin
       outp => flagin
     );
   executeWriteback <= outmux & aluout;
+  zeroflag<=flagout(0);
 
 end architecture;

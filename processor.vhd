@@ -33,20 +33,24 @@ architecture rtl of processor is
   signal inPortsig      : std_logic_vector(31 downto 0);
   signal outsig         : std_logic;
   signal jump           : std_logic;
-
-begin
+  signal zeroflagsig:std_logic; 
+  signal resetpipe2:std_logic :='0';
+  signal pcjump :std_logic_vector(31 downto 0);
+  begin
              inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode;
              inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
              inpPipe3(31 downto 0)  <= inPortsig;
              inpPipe4               <= outPipe3(91 downto 64) & outMemory;
              inpPipe1(15 downto 0)  <= fetch_rst;
              jump                   <= '1' when outPipe1(15 downto 9) = "0011100" and outControl(2) = '1' else '0';
-             fetch_rst              <= outFetch when jump = '0' else "0000000000000000";
+             fetch_rst              <=  "0000000000000000" when jump='1' or resetpipe2='1' else outFetch;
+             resetpipe2 <= '1' when zeroflagsig='1' and outPipe2(75)='1'else '0';
+              pcjump <= outPipe2(31 downto 0) when resetpipe2='1' else outDecode(31 downto 0) when jump='1' else (others=>'0');
   FU: entity work.fetch_unit
       port map (
       clk         => clk,
       rst         => rst,
-      value       => outDecode(31 downto 0),
+      value       => pcjump,
       instruction => outFetch,
       valueEnable => jump,
       pcvalue     => outpc);
@@ -60,7 +64,7 @@ begin
   pipe2: entity work.piplinereg
     port map (
       clk  => clk,
-      rst  => rst,
+      rst  => resetpipe2,
       inp  => inpPipe2,
       outp => outPipe2
     );
@@ -125,7 +129,8 @@ begin
       immvalue         => outExtend,
       clk              => clk,
       reset            => rst,
-      immediate        => outPipe2(74)
+      immediate        => outPipe2(74),
+      zeroflag         => zeroflagsig
     );
   ME: entity work.memory_unit
     port map (clk          => clk,
