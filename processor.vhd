@@ -36,8 +36,9 @@ architecture rtl of processor is
   signal zeroflagsig:std_logic; 
   signal resetpipe2:std_logic :='0';
   signal pcjump :std_logic_vector(31 downto 0);
+  signal fullForward:std_logic_vector(63 downto 0);
   begin
-             inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode when resetpipe2='0' else (others=>'0');
+             inpPipe2               <= outControl & outPipe1(8 downto 0) & fullForward when resetpipe2='0' else (others=>'0');
              inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
              inpPipe3(31 downto 0)  <= inPortsig;
              inpPipe4               <= outPipe3(91 downto 64) & outMemory;
@@ -47,6 +48,21 @@ architecture rtl of processor is
              fetch_rst              <=  "0000000000000000" when jump='1' or resetpipe2='1' else outFetch;
              resetpipe2 <= '1' when zeroflagsig='1' and outPipe2(75)='1' and outPipe2(91 downto 88)="1111" else '0';
               pcjump <= outPipe2(31 downto 0) when resetpipe2='1' else outDecode(63 downto 32) when jump='1' else (others=>'0');
+
+              fullForward(31 downto 0)<= outExcute(31 downto 0) when (inpPipe3(72 downto 70)=inpPipe2(66 downto 64) or 
+              inpPipe3(72 downto 70)=inpPipe2(69 downto 67) ) and inpPipe3(91 downto 88)/="0000" else outMemory(31 downto 0)
+              when (inpPipe4(72 downto 70)=inpPipe2(66 downto 64) or inpPipe4(72 downto 70)=inpPipe2(69 downto 67) )
+              --  and inpPipe4(76)='1'
+              else outDecode(31 downto 0);
+
+
+
+
+              fullForward(63 downto 32 )<=outExcute(63 downto 32) when (inpPipe3(72 downto 70)=inpPipe2(69 downto 67)) and inpPipe3(91 downto 88)="0101" else 
+              outMemory(63 downto 32) when (inpPipe4(72 downto 70)=inpPipe2(69 downto 67)) and inpPipe4(91 downto 88)="0101" 
+              else outDecode(63 downto 32);
+               -- swap is not tested 
+
   FU: entity work.fetch_unit
       port map (
       clk         => clk,
