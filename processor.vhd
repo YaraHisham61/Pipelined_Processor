@@ -37,15 +37,16 @@ architecture rtl of processor is
   signal resetpipe2:std_logic :='0';
   signal pcjump :std_logic_vector(31 downto 0);
   begin
-             inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode;
+             inpPipe2               <= outControl & outPipe1(8 downto 0) & outDecode when resetpipe2='0' else (others=>'0');
              inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
              inpPipe3(31 downto 0)  <= inPortsig;
              inpPipe4               <= outPipe3(91 downto 64) & outMemory;
              inpPipe1(15 downto 0)  <= fetch_rst;
-             jump                   <= '1' when outPipe1(15 downto 9) = "0011100" and outControl(2) = '1' else '0';
+             inpPipe1(47 downto 16)<=outpc;
+             jump                   <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) ="0011110")and outControl(2) = '1') or resetpipe2='1' else '0';
              fetch_rst              <=  "0000000000000000" when jump='1' or resetpipe2='1' else outFetch;
-             resetpipe2 <= '1' when zeroflagsig='1' and outPipe2(75)='1'else '0';
-              pcjump <= outPipe2(31 downto 0) when resetpipe2='1' else outDecode(31 downto 0) when jump='1' else (others=>'0');
+             resetpipe2 <= '1' when zeroflagsig='1' and outPipe2(75)='1' and outPipe2(91 downto 88)="1111" else '0';
+              pcjump <= outPipe2(31 downto 0) when resetpipe2='1' else outDecode(63 downto 32) when jump='1' else (others=>'0');
   FU: entity work.fetch_unit
       port map (
       clk         => clk,
@@ -57,14 +58,14 @@ architecture rtl of processor is
   pipe1: entity work.piplinereg
     port map (
       clk  => clk,
-      rst  => rst,
+      rst  => resetpipe2,
       inp  => inpPipe1,
       outp => outPipe1
     );
   pipe2: entity work.piplinereg
     port map (
       clk  => clk,
-      rst  => resetpipe2,
+      rst  => rst,
       inp  => inpPipe2,
       outp => outPipe2
     );
@@ -86,7 +87,7 @@ architecture rtl of processor is
     port map (
       clk         => clk,
       rst         => rst,
-      pc          => outpc,
+      pc          =>  outPipe1(47 downto 16),
       branch      => outControl(2),
       memwrite    => outControl(3),
       outDecode   => outDecode,

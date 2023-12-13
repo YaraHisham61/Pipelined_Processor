@@ -99,11 +99,11 @@ begin
 
   big: mux_31x1
     port map (
-      input_0 => out2,
+      input_0 => out1,
       input_1 => pc,
       sel     => selector,
       outMux  => outbigmux);
 
-  outDecoder <= outbigmux & out1;
+  outDecoder <=out2 & outbigmux ;
   outDecode  <= outDecoder;
 end architecture;

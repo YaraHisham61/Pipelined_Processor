@@ -40,8 +40,8 @@ architecture executingArch of executingUnit is
     );
   end component;
   signal aluout  : std_logic_vector(31 downto 0);
-  signal flagout : std_logic_vector(3 downto 0);
-  signal flagin  : std_logic_vector(3 downto 0);
+  signal flagout : std_logic_vector(3 downto 0):=(others=>'0');
+  signal flagin  : std_logic_vector(3 downto 0):=(others=>'0');
   signal outmux  : std_logic_vector(31 downto 0);
 
 begin

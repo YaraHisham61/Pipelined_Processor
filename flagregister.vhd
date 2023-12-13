@@ -13,9 +13,21 @@ END flagregister;
 
 ARCHITECTURE flagarch OF flagregister IS
     SIGNAL enable : STD_LOGIC := '1';
+    signal inport:std_logic;
     SIGNAL temp : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
+    signal init:std_logic:='1';
 BEGIN
-    WITH WE SELECT
+process (clk)begin
+  if(init='1') then
+    inport<='0';
+    init<='0';
+    end if;
+    inport<=WE;
+end process;
+
+-- inport<='0' when init='1'else '1';
+-- init<='0' when init='1'else'0';
+    WITH inport SELECT
         temp <= inp WHEN '1',
         temp WHEN OTHERS;
     dffs : FOR i IN 3 DOWNTO 0 GENERATE
