@@ -104,6 +104,6 @@ begin
       sel     => selector,
       outMux  => outbigmux);
 
-  outDecoder <=out2 & outbigmux ;
+  outDecoder <= out2 & outbigmux;
   outDecode  <= outDecoder;
 end architecture;

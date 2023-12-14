@@ -50,14 +50,14 @@ begin
     end if;
     if (se = '0') then
       if we = '1' and ram(to_integer(unsigned(address)))(16) = '0' then
-        ram(to_integer(unsigned(address)))(15 downto 0) <= datain1;
-        ram(to_integer(unsigned(address) + 1))(15 downto 0) <= datain2;
+        ram(to_integer(unsigned(address) + 1))(15 downto 0) <= datain1;
+        ram(to_integer(unsigned(address)))(15 downto 0) <= datain2;
       end if;
       --IF we = '1' AND ram(to_integer(unsigned(address) + 1))(16) = '0' THEN
       --   ram(to_integer(unsigned(address) + 1))(15 DOWNTO 0) <= datain2;
       --  END IF;
       if re = '1' then
-        dataout <= ram(to_integer(unsigned((address))))(15 downto 0) & ram(to_integer(unsigned((address) + 1)))(15 downto 0);
+        dataout <= ram(to_integer(unsigned((address) + 1)))(15 downto 0) & ram(to_integer(unsigned((address))))(15 downto 0);
       end if;
     end if;
     if se = '1' then
