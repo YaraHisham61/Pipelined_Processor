@@ -30,6 +30,7 @@ end entity;
 architecture memBehavioural of data_memory is
   signal ram  : memory_array(0 to 4095)(16 downto 0) := (others =>(others => '0'));
   signal init : STD_LOGIC                            := '1';
+
 begin
   data_memory: process (all) is
     file memory_file : text open READ_MODE is "data_in.txt";

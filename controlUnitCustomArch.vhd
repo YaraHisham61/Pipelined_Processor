@@ -75,7 +75,7 @@ begin
         alu_op <= "1101"; --rcl "1101" 
       when "1011100" =>
         alu_op <= "1110"; --rcr "1110"
-      when "0011100" =>
+      when "1011111" =>
         alu_op <= "1111"; --jz "1111" 
       when others =>
         alu_op <= "0000";

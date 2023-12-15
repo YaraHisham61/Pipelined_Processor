@@ -58,12 +58,30 @@ begin
   --                              outMemory(63 downto 32) when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
   --                              outDecode(63 downto 32);
   -- swap is not tested 
-  fullForward(31 downto 0) <= outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
-                              outExcute(63 downto 32) when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
+  fullForward(31 downto 0) <= outExcute(31 downto 0)  when (inpPipe3(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
+                              outExcute(63 downto 32) when (inpPipe3(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
+                              --Swap in Excute
+                              outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
+                              outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
+                              --Swap in Memory
+                              outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
+                              outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
                               outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' else
+                              outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(69 downto 67)) and outPipe4(77) = '1' else
                               outDecode(31 downto 0);
-  fullForward(63 downto 32) <= outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
-                               outMemory(63 downto 32) when (inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(77) = '1' else
+
+
+
+  fullForward(63 downto 32) <= outExcute(31 downto 0)  when (inpPipe3(66 downto 64) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) = "0101" else
+                               outExcute(63 downto 32) when (inpPipe3(69 downto 67) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) = "0101" else
+                               --Swap in Excute
+                              outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
+                               outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
+                               --Swap in Memory
+                                outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
+                               outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
+                               outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(77) = '1' else
+                               outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(66 downto 64)) and outPipe4(77) = '1' else
                                outDecode(63 downto 32);
 
   FU: entity work.fetch_unit
