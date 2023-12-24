@@ -10,7 +10,10 @@ entity executingUnit is
     signalIn              : in  STD_LOGIC_VECTOR(3 downto 0);
     immvalue              : in  std_logic_vector(31 downto 0);
     clk, reset, immediate : in  std_logic;
-    zeroflag: out std_logic
+    zeroflag              : out std_logic;
+    flagOutSide           : out std_logic_vector(3 downto 0);
+    flagSel               : in  std_logic;
+    flagstore             : in  std_logic_vector(3 downto 0)
   );
 end entity;
 
@@ -39,10 +42,11 @@ architecture executingArch of executingUnit is
       outp : out STD_LOGIC_VECTOR(3 downto 0)
     );
   end component;
-  signal aluout  : std_logic_vector(31 downto 0);
-  signal flagout : std_logic_vector(3 downto 0):=(others=>'0');
-  signal flagin  : std_logic_vector(3 downto 0):=(others=>'0');
-  signal outmux  : std_logic_vector(31 downto 0);
+  signal aluout     : std_logic_vector(31 downto 0);
+  signal flagout    : std_logic_vector(3 downto 0) := (others => '0');
+  signal flagin     : std_logic_vector(3 downto 0) := (others => '0');
+  signal outmux     : std_logic_vector(31 downto 0);
+  signal outmuxflag : std_logic_vector(3 downto 0);
 
 begin
   A: ALU
@@ -66,10 +70,17 @@ begin
       clk  => clk,
       rst  => reset,
       WE   => '1',
-      inp  => flagout,
+      inp  => outmuxflag,
       outp => flagin
     );
+  portout: entity work.mux_4bit
+    port map (
+      input_0 => flagout,
+      input_1 => flagstore,
+      sel     => flagSel,
+      outMux  => outmuxflag
+    );
   executeWriteback <= outmux & aluout;
-  zeroflag<=flagout(0);
-
+  zeroflag         <= flagout(0);
+  flagOutSide      <= flagin;
 end architecture;

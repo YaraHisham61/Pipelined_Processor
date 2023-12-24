@@ -18,6 +18,7 @@ entity memory_unit is
     protectOfree : in  STD_LOGIC;
     protectAfree : in  STD_LOGIC;
     branching    : in  STD_LOGIC;
+    Interrupt    : in  STD_LOGIC;
     address      : in  STD_LOGIC_VECTOR(31 downto 0);
     value        : in  STD_LOGIC_VECTOR(31 downto 0);
     outMemory    : out STD_LOGIC_VECTOR(63 downto 0)
@@ -31,25 +32,27 @@ architecture memoryBehaviour of memory_unit is
   signal stackOut     : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal addressValue : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 begin
-  stackIn <= stackOut - 2 when (stackWrite = '1' and memWrite = '1') or branching = '1' else
-             stackOut + 2 when stackRead = '1' and memRead = '1' else
+
+  stackIn <= stackOut + 2 when stackRead = '1' and memRead = '1' else
+             stackOut - 2 when (stackWrite = '1' and memWrite = '1') or branching = '1' else
              stackIn;
-  addressValue <= stackOut(11 downto 0)     when (stackWrite = '1' and memWrite = '1') or branching = '1' else
+  addressValue <= stackOut(11 downto 0) + 2 when stackRead = '1' and memRead = '1' else
+                  stackOut(11 downto 0)     when (stackWrite = '1' and memWrite = '1') or branching = '1' else
                   address(11 downto 0)      when not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' else
-                  stackOut(11 downto 0) + 2 when stackRead = '1' and memRead = '1' else
                   addressValue;
 
   DM: entity work.data_memory
     port map (
-      clk     => clk,
-      address => addressValue,
-      datain1 => value(31 downto 16),
-      datain2 => value(15 downto 0),
-      dataout => memoryOut,
-      re      => memRead,
-      se      => protectOfree,
-      ss      => protectAfree,
-      we      => memWrite
+      clk       => clk,
+      Interrupt => Interrupt,
+      address   => addressValue,
+      datain1   => value(31 downto 16),
+      datain2   => value(15 downto 0),
+      dataout   => memoryOut,
+      re        => memRead,
+      se        => protectOfree,
+      ss        => protectAfree,
+      we        => memWrite
     );
   with memWrite or memRead or stackWrite or stackRead select
     outMemory <= value & memoryOut when '1',

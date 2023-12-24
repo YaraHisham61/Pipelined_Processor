@@ -37,9 +37,12 @@ begin
       dataout => instruction
     );
 
+  -- reg     <= reg + 1 when valueEnable = '0' else value when valueEnable = '1';
+
+  -- pcvalue <= memLocation;
   process (clk)
   begin
-    if falling_edge(clk) then
+    if rising_edge(clk) then
       if valueEnable = '0' then
         reg <= reg + 1;
       end if;
@@ -49,5 +52,4 @@ begin
     end if;
     pcvalue <= memLocation;
   end process;
-
 end architecture;
