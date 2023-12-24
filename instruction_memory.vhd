@@ -45,6 +45,7 @@ begin
       end loop;
       file_close(memory_file); -- Move file closing outside the loop
     end if;
+
   end process;
   dataout <= ram(to_integer(unsigned((address))));
 

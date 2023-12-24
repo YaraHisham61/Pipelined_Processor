@@ -46,8 +46,7 @@ begin
   inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
   inpPipe3(31 downto 0)  <= inPortsig;
   inpPipe4               <= outPipe3(91 downto 64) & outMemory;
-  inpPipe1(15 downto 0)  <= fetch_rst;
-  inpPipe1(47 downto 16) <= outpc;
+  inpPipe1(47 downto 0)  <= outpc&fetch_rst;
   pcChange<=jump or returnSignal;
   jump                   <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) = "0011110") and outControl(2) = '1') or resetpipe2 = '1' else '0';
   fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' else outFetch;  resetpipe2             <= '1' when zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(91 downto 88) = "1111" else '0';
