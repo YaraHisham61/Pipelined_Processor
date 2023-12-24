@@ -13,7 +13,6 @@ entity processor is
 end entity;
 
 architecture rtl of processor is
-  signal memoryToBranch : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal fetch_rst      : STD_LOGIC_VECTOR(15 downto 0);
   signal inpPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
   signal outPipe1       : STD_LOGIC_VECTOR(91 downto 0) := (others => '0');
@@ -32,8 +31,13 @@ architecture rtl of processor is
   signal outpc          : std_logic_vector(31 downto 0);
   signal inPortsig      : std_logic_vector(31 downto 0);
   signal outsig         : std_logic;
+  signal returnDecode         : std_logic:='0';
+  signal returnExcute         : std_logic:='0';
+  signal pcChange         : std_logic:='0';
+  signal returnSignal         : std_logic:='0';
   signal jump           : std_logic;
   signal zeroflagsig    : std_logic;
+  signal flagout: std_logic_vector(3 downto 0);
   signal resetpipe2     : std_logic                     := '0';
   signal pcjump         : std_logic_vector(31 downto 0);
   signal fullForward    : std_logic_vector(63 downto 0);
@@ -44,11 +48,13 @@ begin
   inpPipe4               <= outPipe3(91 downto 64) & outMemory;
   inpPipe1(15 downto 0)  <= fetch_rst;
   inpPipe1(47 downto 16) <= outpc;
+  pcChange<=jump or returnSignal;
   jump                   <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) = "0011110") and outControl(2) = '1') or resetpipe2 = '1' else '0';
-  fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' else outFetch;
-  resetpipe2             <= '1' when zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(91 downto 88) = "1111" else '0';
-  pcjump                 <= outPipe2(31 downto 0) when resetpipe2 = '1' else outDecode(63 downto 32) when jump = '1' else (others => '0');
-
+  fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' else outFetch;  resetpipe2             <= '1' when zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(91 downto 88) = "1111" else '0';
+  pcjump                 <=outMemory(31 downto 0) when returnSignal='1' else outPipe2(31 downto 0) when resetpipe2 = '1' else outDecode(63 downto 32) when jump = '1' else (others => '0');
+  returnDecode           <= '1' when outPipe1(15 downto 12) = "0001" else '0';
+  returnExcute           <= '1' when (outPipe2(82) = '1' and outPipe2(75) = '1') else '0';
+  returnSignal           <= '1' when (outPipe3(82) = '1' and outPipe3(75) = '1') else '0';
   -- fullForward(31 downto 0) <= outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(91 downto 88) /= "0101" and inpPipe3(77) = '1' else
   --                             outExcute(63 downto 32) when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) = "0101" and inpPipe3(77) = '1' else
   --                             outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(77) = '1' else
@@ -90,7 +96,7 @@ begin
       rst         => rst,
       value       => pcjump,
       instruction => outFetch,
-      valueEnable => jump,
+      valueEnable => pcChange,
       pcvalue     => outpc);
   pipe1: entity work.piplinereg
     port map (
@@ -148,7 +154,7 @@ begin
       reg_write1      => outControl(4),
       reg_write2      => outControl(5),
       reg_read1       => outControl(6),
-      reg_read2       => outControl(7),
+      flagwrite       => outControl(7),
       reg_read3       => outControl(8),
       stack_read      => outControl(9),
       stack_write     => outControl(10),
@@ -168,7 +174,10 @@ begin
       clk              => clk,
       reset            => rst,
       immediate        => outPipe2(74),
-      zeroflag         => zeroflagsig
+      zeroflag         => zeroflagsig,
+      flagsel=> inpPipe4(80),
+      flagstore=>outMemory(31 downto 28),
+      flagOutSignal=>flagout
     );
   ME: entity work.memory_unit
     port map (clk          => clk,

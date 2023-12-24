@@ -4,14 +4,14 @@ library ieee;
 entity CustomControlunit is
   port (
     opcode                                                                                                                                                                     : in  STD_LOGIC_VECTOR(6 downto 0);
-    mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, reg_read2, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
+    mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, flagwrite, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
     clk                                                                                                                                                                        : in  STD_LOGIC;
     alu_op                                                                                                                                                                     : out STD_LOGIC_VECTOR(3 downto 0)
   );
 end entity;
 
 architecture ControlunitTraditionalArch of CustomControlunit is
-  --    signal  mem_read ,immediate_value ,branch ,mem_write ,reg_write1 ,reg_write2 ,reg_read1 ,reg_read2 ,reg_read3 ,stack_read ,stack_write :  std_logic;
+  --    signal  mem_read ,immediate_value ,branch ,mem_write ,reg_write1 ,reg_write2 ,reg_read1 ,flagwrite ,reg_read3 ,stack_read ,stack_write :  std_logic;
 begin
 
   -- reg_read1 <='0' when opcode(6 downto 4)="000" or opcode(6 downto 1)="101111" else '0';
@@ -23,7 +23,7 @@ begin
   -- mem_read  <='1' when opcode(6 downto 3)="0001" or opcode="1011110" else '0';
   -- reg_write2 <='1' when opcode="0101111" else '0';
   --  reg_read3 <='1' when opcode(6 downto 4)="011"else '0';
-  --  reg_read2 <='1' when opcode(6 downto 4)="011" or opcode (5 downto 4)="10" else '0';
+  --  flagwrite <='1' when opcode(6 downto 4)="011" or opcode (5 downto 4)="10" else '0';
   process (opcode)
   begin
     -- Default values
@@ -36,7 +36,7 @@ begin
     mem_read <= '0';
     reg_write2 <= '0';
     reg_read3 <= '0';
-    reg_read2 <= '0';
+    flagwrite <= '0';
     reg_write1 <= '0';
     protectAfree <= '0';
     protectOfree <= '0';
@@ -114,7 +114,7 @@ begin
       stack_read <= '1';
     end if;
 
-    if opcode(6 downto 2) = "00011" or opcode = "1011110" or opcode = "0010110" then
+    if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" then
       mem_read <= '1';
     end if;
 
@@ -135,8 +135,8 @@ begin
       reg_read3 <= '1';
     end if;
 
-    if opcode(6 downto 4) = "011" or opcode(5 downto 4) = "10" then
-      reg_read2 <= '1';
+    if opcode="0001001" then
+      flagwrite <= '1';
     end if;
 
     --    reg_read1 <= reg_read1 ;
@@ -148,7 +148,7 @@ begin
     --    mem_read <= mem_read ;
     --    reg_write2 <= reg_write2 ;
     --    reg_read3 <= reg_read3 ;
-    --    reg_read2 <= reg_read2 ;
+    --    flagwrite <= flagwrite ;
     --    reg_write1<=reg_write1 ;
   end process;
 end architecture;
