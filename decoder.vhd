@@ -54,15 +54,6 @@ architecture decodeArch of decoder is
       outMux  : out STD_LOGIC_VECTOR(31 downto 0));
   end component;
 
-  component CustomControlunit is
-    port (
-      opcode                                                                                                                                                                     : in  STD_LOGIC_VECTOR(6 downto 0);
-      mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, reg_read2, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
-      clk                                                                                                                                                                        : in  STD_LOGIC;
-      alu_op                                                                                                                                                                     : out STD_LOGIC_VECTOR(3 downto 0)
-    );
-  end component;
-
   signal out1      : STD_LOGIC_VECTOR(31 downto 0);
   signal out2      : STD_LOGIC_VECTOR(31 downto 0);
   signal outbigmux : STD_LOGIC_VECTOR(31 downto 0);

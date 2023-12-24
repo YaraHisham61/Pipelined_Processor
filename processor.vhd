@@ -49,8 +49,9 @@ begin
   inpPipe1(47 downto 0)  <= outpc&fetch_rst;
   pcChange<=jump or returnSignal;
   jump                   <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) = "0011110") and outControl(2) = '1') or resetpipe2 = '1' else '0';
-  fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' else outFetch;  resetpipe2             <= '1' when zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(91 downto 88) = "1111" else '0';
-  pcjump                 <=outMemory(31 downto 0) when returnSignal='1' else outPipe2(31 downto 0) when resetpipe2 = '1' else outDecode(63 downto 32) when jump = '1' else (others => '0');
+  fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' else outFetch; 
+  resetpipe2             <= '1' when (zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(91 downto 88) = "1111") or rst='1' else '0';
+  pcjump                 <=outMemory(31 downto 0) when returnSignal='1' or rst='1' else outPipe2(31 downto 0) when resetpipe2 = '1' else outDecode(63 downto 32) when jump = '1' else (others => '0');
   returnDecode           <= '1' when outPipe1(15 downto 12) = "0001" else '0';
   returnExcute           <= '1' when (outPipe2(82) = '1' and outPipe2(75) = '1') else '0';
   returnSignal           <= '1' when (outPipe3(82) = '1' and outPipe3(75) = '1') else '0';
@@ -92,7 +93,7 @@ begin
   FU: entity work.fetch_unit
     port map (
       clk         => clk,
-      rst         => rst,
+      rst         => '0',
       value       => pcjump,
       instruction => outFetch,
       valueEnable => pcChange,
@@ -100,7 +101,7 @@ begin
   pipe1: entity work.piplinereg
     port map (
       clk  => clk,
-      rst  => resetpipe2,
+      rst  => resetpipe2 ,
       inp  => inpPipe1,
       outp => outPipe1
     );
