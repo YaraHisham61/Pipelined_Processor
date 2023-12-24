@@ -42,7 +42,7 @@ begin
   -- pcvalue <= memLocation;
   process (clk)
   begin
-    if rising_edge(clk) then
+    if falling_edge(clk) then
       if valueEnable = '0' then
         reg <= reg + 1;
       end if;

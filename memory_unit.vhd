@@ -18,7 +18,6 @@ entity memory_unit is
     protectOfree : in  STD_LOGIC;
     protectAfree : in  STD_LOGIC;
     branching    : in  STD_LOGIC;
-    Interrupt    : in  STD_LOGIC;
     address      : in  STD_LOGIC_VECTOR(31 downto 0);
     value        : in  STD_LOGIC_VECTOR(31 downto 0);
     outMemory    : out STD_LOGIC_VECTOR(63 downto 0)
@@ -44,7 +43,6 @@ begin
   DM: entity work.data_memory
     port map (
       clk       => clk,
-      Interrupt => Interrupt,
       address   => addressValue,
       datain1   => value(31 downto 16),
       datain2   => value(15 downto 0),

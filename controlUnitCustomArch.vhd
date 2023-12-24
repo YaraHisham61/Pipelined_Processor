@@ -6,7 +6,6 @@ entity CustomControlunit is
     opcode                                                                                                                                                                     : in  STD_LOGIC_VECTOR(6 downto 0);
     mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, flagwirte, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
     clk                                                                                                                                                                        : in  STD_LOGIC;
-    Interrupt                                                                                                                                                                  : in  STD_LOGIC;
     alu_op                                                                                                                                                                     : out STD_LOGIC_VECTOR(3 downto 0)
   );
 end entity;
@@ -95,7 +94,7 @@ begin
       reg_read1 <= '1';
     end if;
 
-    if opcode(6 downto 2) = "00111" or opcode(6 downto 3) = "0001" or Interrupt = '1' then
+    if opcode(6 downto 2) = "00111" or opcode(6 downto 3) = "0001" then
       branch <= '1';
     end if;
 
@@ -103,11 +102,11 @@ begin
       immediate_value <= '1';
     end if;
 
-    if opcode = "1010001" or opcode = "0010111" or opcode = "0011110" or Interrupt = '1' then
+    if opcode = "1010001" or opcode = "0010111" or opcode = "0011110" then
       mem_write <= '1';
     end if;
 
-    if opcode = "0010111" or opcode = "0011110" or Interrupt = '1' then
+    if opcode = "0010111" or opcode = "0011110" then
       stack_write <= '1';
     end if;
 
@@ -115,7 +114,7 @@ begin
       stack_read <= '1';
     end if;
 
-    if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" or Interrupt = '1' then
+    if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" then
       mem_read <= '1';
     end if;
 

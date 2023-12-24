@@ -15,16 +15,15 @@ library ieee;
 
 entity data_memory is
   port (
-    Interrupt : in  STD_LOGIC;
-    clk       : in  STD_LOGIC;
-    se        : in  STD_LOGIC;
-    ss        : in  STD_LOGIC;
-    we        : in  STD_LOGIC;
-    re        : in  STD_LOGIC;
-    address   : in  STD_LOGIC_VECTOR(11 downto 0);
-    datain1   : in  STD_LOGIC_VECTOR(15 downto 0);
-    datain2   : in  STD_LOGIC_VECTOR(15 downto 0);
-    dataout   : out STD_LOGIC_VECTOR(31 downto 0)
+    clk     : in  STD_LOGIC;
+    se      : in  STD_LOGIC;
+    ss      : in  STD_LOGIC;
+    we      : in  STD_LOGIC;
+    re      : in  STD_LOGIC;
+    address : in  STD_LOGIC_VECTOR(11 downto 0);
+    datain1 : in  STD_LOGIC_VECTOR(15 downto 0);
+    datain2 : in  STD_LOGIC_VECTOR(15 downto 0);
+    dataout : out STD_LOGIC_VECTOR(31 downto 0)
   );
 end entity;
 
@@ -50,9 +49,9 @@ begin
       end loop;
       file_close(memory_file);
     end if;
-    if Interrupt = '1' then
-      dataout <= ram(to_integer(unsigned((interruptaddress) + 1)))(15 downto 0) & ram(to_integer(unsigned((interruptaddress))))(15 downto 0);
-    end if;
+    -- if Interrupt = '1' then
+    --   dataout <= ram(to_integer(unsigned((interruptaddress) + 1)))(15 downto 0) & ram(to_integer(unsigned((interruptaddress))))(15 downto 0);
+    -- end if;
     if falling_edge(clk) then
       if (se = '0') then
         if we = '1' and ram(to_integer(unsigned(address)))(16) = '0' then
@@ -64,7 +63,7 @@ begin
         --  END IF;
       end if;
     end if;
-    if re = '1' and Interrupt = '0' then
+    if re = '1' then
       dataout <= ram(to_integer(unsigned((address) + 1)))(15 downto 0) & ram(to_integer(unsigned((address))))(15 downto 0);
     end if;
     if se = '1' then
