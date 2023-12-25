@@ -5,7 +5,7 @@ entity CustomControlunit is
   port (
     opcode                                                                                                                                                                     : in  STD_LOGIC_VECTOR(6 downto 0);
     mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, flagwrite, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
-    clk                                                                                                                                                                        : in  STD_LOGIC;
+    clk, Interrupt                                                                                                                                                             : in  STD_LOGIC;
     alu_op                                                                                                                                                                     : out STD_LOGIC_VECTOR(3 downto 0)
   );
 end entity;
@@ -24,7 +24,13 @@ begin
   -- reg_write2 <='1' when opcode="0101111" else '0';
   --  reg_read3 <='1' when opcode(6 downto 4)="011"else '0';
   --  flagwrite <='1' when opcode(6 downto 4)="011" or opcode (5 downto 4)="10" else '0';
-  process (opcode)
+  --   branch <= '1' when opcode(6 downto 2) = "00111" or opcode(6 downto 3) = "0001" or Interrupt = '1' else '0';
+  --   mem_write <= '1' when opcode = "1010001" or opcode = "0010111" or opcode = "0011110" or Interrupt = '1' else '0';
+  --  if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" or Interrupt = '1' then
+  --       mem_read <= '1';
+  --     end if;
+  -- end if;
+  process (opcode, Interrupt)
   begin
     -- Default values
     reg_read1 <= '0';
@@ -94,19 +100,17 @@ begin
       reg_read1 <= '1';
     end if;
 
-    if opcode(6 downto 2) = "00111" or opcode(6 downto 3) = "0001" then
+    if opcode(6 downto 2) = "00111" or opcode(6 downto 3) = "0001" or Interrupt = '1' then
       branch <= '1';
     end if;
-
     if opcode(6) = '1' then
       immediate_value <= '1';
     end if;
 
-    if opcode = "1010001" or opcode = "0010111" or opcode = "0011110" then
+    if opcode = "1010001" or opcode = "0010111" or opcode = "0011110" or Interrupt = '1' then
       mem_write <= '1';
     end if;
-
-    if opcode = "0010111" or opcode = "0011110" then
+    if opcode = "0010111" or opcode = "0011110" or Interrupt = '1' then
       stack_write <= '1';
     end if;
 
@@ -114,7 +118,7 @@ begin
       stack_read <= '1';
     end if;
 
-    if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" then
+    if opcode(6 downto 3) = "0001" or opcode = "1011110" or opcode = "0010110" or Interrupt = '1' then
       mem_read <= '1';
     end if;
 
@@ -135,7 +139,7 @@ begin
       reg_read3 <= '1';
     end if;
 
-    if opcode="0001001" then
+    if opcode = "0001001" then
       flagwrite <= '1';
     end if;
 

@@ -16,7 +16,8 @@ entity decoder is
     pc               : in  STD_LOGIC_VECTOR(31 downto 0);
     branch, memwrite : in  std_logic;
     outDecode        : out STD_LOGIC_VECTOR(63 downto 0);
-    yarab            : in  Std_Logic
+    yarab            : in  Std_Logic;
+    Interrupt        : in  Std_Logic
   );
 end entity;
 
@@ -80,7 +81,7 @@ begin
       Out1       => out1,
       Out2       => out2
     );
-     selector <= branch and memwrite;
+     selector <= (branch and memwrite) or Interrupt;
   m: mux_2x1
       port map (
       input_0 => inst(15 downto 9),

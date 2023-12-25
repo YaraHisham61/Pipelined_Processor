@@ -21,12 +21,12 @@ end entity;
 architecture rtl of fetch_unit is
   signal reg         : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
   signal memLocation : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-  signal inputpc: STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+  signal inputpc     : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 begin
   PC: entity work.pcPointer
     port map (
-      clk  => clk,
-      reset  => rst,
+      clk      => clk,
+      reset    => rst,
       data_in  => inputpc,
       data_out => memLocation
     );
@@ -36,15 +36,15 @@ begin
       address => memLocation(11 downto 0),
       dataout => instruction
     );
-reg<=memLocation;
-pcvalue<=memLocation;
-pcmux:entity work.mux_31x1
-port map (
-input_0 => reg+1,
-input_1 => value,
-sel     => valueEnable,
-outMux  => inputpc
-);
+                reg     <= memLocation;
+                pcvalue <= memLocation;
+  pcmux: entity work.mux_31x1
+      port map (
+      input_0 => reg + 1,
+      input_1 => value,
+      sel     => valueEnable,
+      outMux  => inputpc
+    );
 
   -- process (clk)
   -- begin
@@ -56,5 +56,5 @@ outMux  => inputpc
   --     end if;
   --   pcvalue <= memLocation;
   -- end process;
-
 end architecture;
+
