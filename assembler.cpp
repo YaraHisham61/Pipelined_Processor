@@ -62,7 +62,7 @@ string decToBin(int number)
 int main()
 {
     ifstream infile("program.txt");
-    ofstream outFile("program_binary.txt");
+    ofstream outFile("data.txt");
     string inst, str, additional;
     vector<string> regs;
     int instLen = 0, strLen = 0;

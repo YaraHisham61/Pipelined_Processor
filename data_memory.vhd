@@ -65,15 +65,16 @@ begin
         dataout <= ram(to_integer(unsigned((address) + 1)))(15 downto 0) & ram(to_integer(unsigned((address))))(15 downto 0);
       end if;
     end if;
-    if se = '1' then
-      if ss = '0' then
-        ram(to_integer(unsigned(address))) <= (others => '0');
-        ram(to_integer(unsigned(address) + 1)) <= (others => '0');
-      else
-        ram(to_integer(unsigned(address)))(16) <= '1';
-        ram(to_integer(unsigned(address) + 1))(16) <= '1';
+    if falling_edge(clk) then
+      if se = '1' then
+        if ss = '0' then
+          ram(to_integer(unsigned(address))) <= (others => '0');
+          ram(to_integer(unsigned(address) + 1)) <= (others => '0');
+        else
+          ram(to_integer(unsigned(address)))(16) <= '1';
+          ram(to_integer(unsigned(address) + 1))(16) <= '1';
+        end if;
       end if;
-
     end if;
   end process;
   -- WITH we AND NOT ram(to_integer(unsigned(address)))(16) AND NOT se SELECT
