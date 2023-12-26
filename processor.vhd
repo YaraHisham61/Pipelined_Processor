@@ -73,14 +73,14 @@ begin
   returnExcute <= '1' when (outPipe2(82) = '1' and outPipe2(75) = '1') or outPipe2(92) = '1' else '0';
   returnSignal <= '1' when (outPipe3(82) = '1' and outPipe3(75) = '1') or outPipe3(92) = '1' else '0';
 
-  fullForward(31 downto 0) <= outExcute(31 downto 0)  when (inpPipe3(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
+  fullForward(31 downto 0) <= inPortsig               when (inpPipe3(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
                               outExcute(63 downto 32) when (inpPipe3(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
                               --Swap in Excute
   outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
                               outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
                               --Swap in Memory
-  outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
-                              outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
+  inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1') or inpPipe3(86) = '1' else
+                              inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1') or inpPipe3(86) = '1' else
                               outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' and inpPipe2(75) = '0' else
                               outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(69 downto 67)) and outPipe4(77) = '1' else
 
