@@ -148,7 +148,7 @@ int main()
                 }
                 else if (inst == "JMP")
                 {
-                    outFile << "0011100" << which_register(regs[0]) << which_register(regs[0]);
+                    outFile << "0011101" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
                 }
             }
@@ -156,27 +156,27 @@ int main()
             {
                 if (inst == "ADD")
                 {
-                    outFile << "0011010" << which_register(regs[0]) << which_register(regs[1]);
+                    outFile << "0110001" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[2]) << endl;
                 }
                 else if (inst == "SUB")
                 {
-                    outFile << "0011010" << which_register(regs[0]) << which_register(regs[1]);
+                    outFile << "0110010" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[2]) << endl;
                 }
                 else if (inst == "AND")
                 {
-                    outFile << "0011010" << which_register(regs[0]) << which_register(regs[1]);
+                    outFile << "0110011" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[2]) << endl;
                 }
                 else if (inst == "OR")
                 {
-                    outFile << "0011010" << which_register(regs[0]) << which_register(regs[1]);
+                    outFile << "0110100" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[2]) << endl;
                 }
                 else if (inst == "XOR")
                 {
-                    outFile << "0011010" << which_register(regs[0]) << which_register(regs[1]);
+                    outFile << "0110101" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[2]) << endl;
                 }
                 else
