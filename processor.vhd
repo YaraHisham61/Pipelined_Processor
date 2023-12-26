@@ -81,7 +81,7 @@ begin
                               --Swap in Memory
   outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
                               outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
-                              outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' and inpPipe2(83) = '0' and inpPipe2(75) = '0' else
+                              outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' and inpPipe2(75) = '0' else
                               outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(69 downto 67)) and outPipe4(77) = '1' else
 
                               outDecode(31 downto 0);
