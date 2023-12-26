@@ -41,18 +41,20 @@ architecture rtl of processor is
   signal flagout         : std_logic_vector(3 downto 0);
   signal resetpipe2      : std_logic                     := '0';
   signal interruptay7aga : std_logic                     := '0';
+  signal stduse          : std_logic                     := '0';
   signal pcjump          : std_logic_vector(31 downto 0);
   signal pcinterrupt     : std_logic_vector(31 downto 0) := (others => '0');
   signal fullForward     : std_logic_vector(63 downto 0);
 
 begin
+  stduse                 <= '1' when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1' else '0';
   pcinterrupt            <= flagout & outPipe3(27 downto 0) when outPipe3(92) = '1' else outPipe3(31 downto 0);
   interruptay7aga        <= '1' when outPipe3(92) = '1' else '0';
   inpPipe1(92)           <= '0' when outPipe4(92) = '1' and pcChange = '1' else Interrupt;
-  inpPipe2(92)           <= outPipe1(92);
+  inpPipe2(92)           <= outPipe1(92) when stduse = '0' else inpPipe2(92);
   inpPipe3(92)           <= outPipe2(92);
   inpPipe4(92)           <= outPipe3(92);
-  inpPipe2(93)           <= outControl(19);
+  inpPipe2(93)           <= outControl(19) when stduse = '0' else inpPipe2(93);
   inpPipe3(93)           <= outPipe2(93);
   inpPipe4(93)           <= outPipe3(93);
   inpPipe2(91 downto 0)  <= outControl(18 downto 0) & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
@@ -76,12 +78,12 @@ begin
   fullForward(31 downto 0) <= inPortsig               when (inpPipe3(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
                               outExcute(63 downto 32) when (inpPipe3(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) = "0101" else
                               --Swap in Excute
-  outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
+  inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1') or ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(86) = '1') else
+                              inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1') or ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(86) = '1') else
+                              outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
                               outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(69 downto 67)) and inpPipe4(91 downto 88) = "0101" else
                               --Swap in Memory
-  inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1') or inpPipe3(86) = '1' else
-                              inPortsig               when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1') or inpPipe3(86) = '1' else
-                              outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' and inpPipe2(75) = '0' else
+  outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(69 downto 67)) and inpPipe4(77) = '1' and inpPipe2(75) = '0' else
                               outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(69 downto 67)) and outPipe4(77) = '1' else
 
                               outDecode(31 downto 0);
@@ -89,12 +91,12 @@ begin
   fullForward(63 downto 32) <= outExcute(31 downto 0)  when (inpPipe3(66 downto 64) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) = "0101" else
                                outExcute(63 downto 32) when (inpPipe3(69 downto 67) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) = "0101" else
                                --Swap in Excute
-  outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
-                               outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
-                               --Swap in Memory
   outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' and inpPipe2(79) = '1' else
                                outExcute(31 downto 0)  when (inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(91 downto 88) /= "0000" and inpPipe3(77) = '1' else
-                               outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(77) = '1' else
+                               outMemory(31 downto 0)  when (inpPipe4(66 downto 64) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
+                               outMemory(63 downto 32) when (inpPipe4(69 downto 67) = inpPipe2(66 downto 64)) and inpPipe4(91 downto 88) = "0101" else
+                               --Swap in Memory 
+  outMemory(31 downto 0)  when (inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(77) = '1' else
                                outPipe4(31 downto 0)   when (outPipe4(72 downto 70) = inpPipe2(66 downto 64)) and outPipe4(77) = '1' else
                                outDecode(63 downto 32);
 
@@ -105,7 +107,8 @@ begin
       value       => pcjump,
       instruction => outFetch,
       valueEnable => pcChange,
-      pcvalue     => outpc);
+      pcvalue     => outpc,
+      stduse      => stduse);
   pipe1: entity work.piplinereg
     port map (
       clk  => clk,

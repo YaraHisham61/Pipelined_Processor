@@ -48,24 +48,90 @@ string which_register(string s)
         return "111";
     }
 }
-string decToBin(int number)
+string hexNumber(char hexNum)
 {
-    int n = (int)(log2(number));
-    string bin = bitset<64>(number).to_string().substr(64 - n - 1);
-    string zeros = "";
-    for (int i = 0; i < 16 - bin.length(); i++)
+    hexNum = toupper(hexNum);
+    switch (hexNum)
     {
-        zeros.append("0");
+    case '0':
+        return "0000";
+        break;
+    case '1':
+        return "0001";
+        break;
+    case '2':
+        return "0010";
+        break;
+    case '3':
+        return "0011";
+        break;
+    case '4':
+        return "0100";
+        break;
+    case '5':
+        return "0101";
+        break;
+    case '6':
+        return "0110";
+        break;
+    case '7':
+        return "0111";
+        break;
+    case '8':
+        return "1000";
+        break;
+    case '9':
+        return "1001";
+        break;
+    case 'A':
+        return "1010";
+        break;
+    case 'B':
+        return "1011";
+        break;
+    case 'C':
+        return "1100";
+        break;
+    case 'D':
+        return "1101";
+        break;
+    case 'E':
+        return "1110";
+        break;
+    default:
+        return "1111";
+        break;
     }
-    return zeros + bin;
 }
+string hexToBin(string number)
+{
+    int len = number.length();
+
+    switch (len)
+    {
+    case 1:
+        number = "000" + number;
+        break;
+    case 2:
+        number = "00" + number;
+        break;
+    case 3:
+        number = "0" + number;
+        break;
+    default:
+        break;
+    }
+    return hexNumber(number[0]) + hexNumber(number[1]) + hexNumber(number[2]) + hexNumber(number[3]);
+}
+
 int main()
 {
-    ifstream infile("program.txt");
+    ifstream infile("Memory.txt");
     ofstream outFile("data.txt");
     string inst, str, additional;
     vector<string> regs;
     int instLen = 0, strLen = 0;
+    cout << "Working ......" << endl;
     while (getline(infile, str))
     {
         strLen = str.length();
@@ -183,59 +249,61 @@ int main()
                 {
                     outFile << "1100000" << which_register(regs[0]) << which_register(regs[1]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[2])) << endl;
+
+                    outFile << hexToBin(regs[2]) << endl;
                 }
             }
             else
             {
                 if (inst == "SWAP")
                 {
-                    outFile << "0101111" << which_register(regs[0]) << which_register(regs[1]);
-                    outFile << which_register(regs[0]) << endl;
+                    outFile << "0101111" << which_register(regs[0]) << which_register(regs[0]);
+                    outFile << which_register(regs[1]) << endl;
                 }
                 else if (inst == "CMP")
                 {
-                    outFile << "0101110" << which_register(regs[0]) << which_register(regs[1]);
-                    outFile << which_register(regs[0]) << endl;
+                    outFile << "0101110" << which_register(regs[0]) << which_register(regs[0]);
+                    outFile << which_register(regs[1]) << endl;
                 }
                 else if (inst == "BITSET")
                 {
                     outFile << "1010000" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
                 else if (inst == "LDM")
                 {
                     outFile << "1011111" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
                 else if (inst == "RCL")
                 {
                     outFile << "1011101" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
                 else if (inst == "RCR")
                 {
                     outFile << "1011100" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
                 else if (inst == "LDD")
                 {
                     outFile << "1011110" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
                 else if (inst == "STD")
                 {
                     outFile << "1010001" << which_register(regs[0]) << which_register(regs[0]);
                     outFile << which_register(regs[0]) << endl;
-                    outFile << decToBin(stoi(regs[1])) << endl;
+                    outFile << hexToBin(regs[1]) << endl;
                 }
             }
         }
     }
+    cout << "Finished Successfully" << endl;
     return 0;
 }

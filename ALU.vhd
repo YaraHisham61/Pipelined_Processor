@@ -1,10 +1,9 @@
-library IEEE;
-  use IEEE.STD_LOGIC_1164.all;
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
+  use ieee.math_real.all;
   -- use IEEE.STD_LOGIC_ARITH.all;
   use IEEE.STD_LOGIC_UNSIGNED.all;
-  use ieee.numeric_std.all;
-
-  use ieee.std_logic_1164.all;
 
 entity ALU is
   -- GENERIC (n : integer <= 32);
@@ -23,21 +22,37 @@ architecture archALU of ALU is
   signal bitset     : STD_LOGIC_VECTOR(32 downto 0) := (others => '0');
   signal ones       : STD_LOGIC_VECTOR(32 downto 0);
   signal zeros      : STD_LOGIC_VECTOR(32 downto 0) := (others => '0');
-  signal bit        : std_logic_vector(32 downto 0) := (others => '0');
+  signal bits       : std_logic_vector(32 downto 0) := (others => '0');
   signal shift      : std_logic_vector(65 downto 0) := (others => '0');
   signal shift2     : std_logic_vector(65 downto 0) := (others => '0');
   signal shiftleft  : std_logic_vector(65 downto 0) := (others => '0');
   signal shiftleft2 : std_logic_vector(65 downto 0) := (others => '0');
+  signal num        : integer                       := 0;
 begin
   -- how make rotate left with carry with numbers times to rotate
   -- how make rotate right with carry with numbers times to rotate
-  zeros                                       <= (others => '0');
-  ones                                        <= (0 => '1', others => '0');
-  tempReg1                                    <= '0' & Reg1;
-  tempReg2                                    <= '0' & Reg2;
-  bit(to_integer(unsigned(Reg2(4 downto 0)))) <= '1';
-  bitset                                      <= tempReg1 or bit;
+  zeros    <= (others => '0');
+  ones     <= (0 => '1', others => '0');
+  tempReg1 <= '0' & Reg1;
+  tempReg2 <= '0' & Reg2;
+
+  -- process (Reg1, Reg2, Signals)
+  --   variable temp : std_logic_vector(32 downto 0);
+  -- begin
+  --   if (Signals = "1100") then
+  --     temp := tempReg1;
+  --     for i in 1 to 32 loop
+  --       if (tempReg2 = i) then
+  --         temp(i) := '1';
+  --       end if;
+  --     end loop;
+  --     bitset <= temp;
+  --   end if;
+  -- end process;
+  bitset <= tempReg1(32 downto to_integer(unsigned(Reg2(3 downto 0))) + 1) & '1' & tempReg1(to_integer(unsigned(Reg2(3 downto 0))) - 1 downto 0);
   --rotate right
+  -- bits(to_integer(unsigned(Reg2(4 downto 0)))) <= '1';
+  -- bitset                                       <= tempReg1 or bits;
   shift(65 downto 33) <= CCR(2) & Reg1;
   shift2              <= shift srl to_integer(unsigned(Reg2));
   --rotate right
@@ -71,6 +86,9 @@ begin
                tempOut(32) when Signals = "1101" else
                tempOut(32) when Signals = "0111" else
                tempOut(32) when Signals = "1011" else
+               tempOut(32) when Signals = "0011" else
+               tempOut(32) when Signals = "0100" else
                CCR(2)      when Signals = "0000" else
+               CCR(2)      when Signals = "0001" else
                '0';
 end architecture;

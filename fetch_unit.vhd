@@ -14,13 +14,15 @@ entity fetch_unit is
     valueEnable : in  STD_LOGIC;
     value       : in  STD_LOGIC_VECTOR(31 downto 0);
     instruction : out STD_LOGIC_VECTOR(15 downto 0);
-    pcvalue     : out std_logic_vector(31 downto 0)
+    pcvalue     : out std_logic_vector(31 downto 0);
+    stduse      : in  STD_LOGIC
   );
 end entity;
 
 architecture rtl of fetch_unit is
   signal reg         : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
   signal memLocation : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+  signal pcstd       : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal inputpc     : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 begin
   PC: entity work.pcPointer
@@ -38,9 +40,10 @@ begin
     );
                 reg     <= memLocation;
                 pcvalue <= memLocation;
+                pcstd   <= reg when stduse = '1' else reg + 1;
   pcmux: entity work.mux_31x1
       port map (
-      input_0 => reg + 1,
+      input_0 => pcstd,
       input_1 => value,
       sel     => valueEnable,
       outMux  => inputpc
