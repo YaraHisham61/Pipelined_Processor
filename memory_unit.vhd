@@ -34,12 +34,12 @@ architecture memoryBehaviour of memory_unit is
   signal memreadsig   : Std_logic                     := '0';
 begin
   stackIn <= stackOut + 2 when stackRead = '1' and memRead = '1' else
-             stackOut - 2 when (stackWrite = '1' and memWrite = '1') or branching = '1' else
+             stackOut - 2 when (stackWrite = '1' and memWrite = '1') else
 
              stackIn;
   addressValue <= "000000000000"            when rst = '1' else
                   stackOut(11 downto 0) + 2 when stackRead = '1' and memRead = '1' else
-                  stackOut(11 downto 0)     when (stackWrite = '1' and memWrite = '1') or branching = '1' else
+                  stackOut(11 downto 0)     when (stackWrite = '1' and memWrite = '1') else
                   address(11 downto 0)      when not (stackWrite = '1' and memWrite = '1') and not (stackRead = '1' and memRead = '1') and not branching = '1' else
                   addressValue;
              memreadsig <= '1' when rst = '1' else memRead;

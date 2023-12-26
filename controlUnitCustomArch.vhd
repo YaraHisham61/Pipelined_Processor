@@ -4,7 +4,7 @@ library ieee;
 entity CustomControlunit is
   port (
     opcode                                                                                                                                                                     : in  STD_LOGIC_VECTOR(6 downto 0);
-    mem_read, immediate_value, branch, mem_write, reg_write1, reg_write2, reg_read1, flagwrite, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
+    mem_read, immediate_value,jz, branch, mem_write, reg_write1, reg_write2, reg_read1, flagwrite, reg_read3, stack_read, stack_write, protectAfree, protectOfree, inOout, inAout : out STD_LOGIC;
     clk, Interrupt                                                                                                                                                             : in  STD_LOGIC;
     alu_op                                                                                                                                                                     : out STD_LOGIC_VECTOR(3 downto 0)
   );
@@ -48,6 +48,7 @@ begin
     protectOfree <= '0';
     inOout <= '0';
     inAout <= '0';
+    jz<='0';
 
     -- Conditions
     case opcode is
@@ -92,7 +93,9 @@ begin
     if (opcode = "0010100") then
       inAout <= '1';
     end if;
-
+if(opcode="0011100") then
+  jz<='1';
+end if;
     if opcode(6 downto 1) = "101111" or opcode = "0010110" or opcode(6 downto 1) = "101110" or opcode = "1010000" or opcode(6 downto 4) = "011" or opcode(6 downto 4) = "110" or opcode = "0101111" or opcode = "0010101" or opcode(6 downto 2) = "00100" then
       reg_write1 <= '1';
     end if;
