@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <bitset>
+#include <cmath>
+#include<string>
 using namespace std;
 
 vector<string> tokenize(string s, string del = " ")
@@ -127,7 +132,7 @@ string hexToBin(string number)
 int main()
 {
     ifstream infile("Memory.txt");
-    ofstream outFile("data.txt");
+    ofstream outFile("Memory_Assembled.txt");
     string inst, str, additional;
     vector<string> regs;
     int instLen = 0, strLen = 0;

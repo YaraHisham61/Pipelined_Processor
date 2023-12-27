@@ -23,6 +23,9 @@ architecture rtl of processor is
   signal outPipe3        : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
   signal inpPipe4        : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
   signal outPipe4        : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
+  signal loaduse         : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
+  signal loaduse1        : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
+  signal loaduse3        : STD_LOGIC_VECTOR(93 downto 0) := (others => '0');
   signal outControl      : STD_LOGIC_VECTOR(19 downto 0);
   signal outDecode       : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
   signal outMemory       : STD_LOGIC_VECTOR(63 downto 0) := (others => '0');
@@ -46,32 +49,37 @@ architecture rtl of processor is
   signal pcinterrupt     : std_logic_vector(31 downto 0) := (others => '0');
   signal pcvalue         : std_logic_vector(31 downto 0) := (others => '0');
   signal fullForward     : std_logic_vector(63 downto 0);
+  signal stdcontrol      : std_logic_vector(18 downto 0);
 
 begin
-  pcvalue                <= outpc when outPipe1(92) = '0' else outPipe1(47 downto 16);
-  stduse                 <= '1' when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1' else '0';
-  pcinterrupt            <= flagout & outPipe3(27 downto 0) when outPipe3(92) = '1' else outPipe3(31 downto 0);
-  interruptay7aga        <= '1' when outPipe3(92) = '1' else '0';
-  inpPipe1(92)           <= '0' when outPipe4(92) = '1' and pcChange = '1' else Interrupt;
-  inpPipe2(92)           <= outPipe1(92);
-  inpPipe3(92)           <= outPipe2(92);
-  inpPipe4(92)           <= outPipe3(92);
-  inpPipe2(93)           <= outControl(19);
-  inpPipe3(93)           <= outPipe2(93);
-  inpPipe4(93)           <= outPipe3(93);
-  inpPipe2(91 downto 0)  <= outControl(18 downto 0) & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
-  inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
-  inpPipe3(31 downto 0)  <= inPortsig;
-  inpPipe4(91 downto 0)  <= outPipe3(91 downto 64) & outMemory;
-  inpPipe1(15 downto 0)  <= fetch_rst;
-  inpPipe1(47 downto 16) <= outpc;
-  pcChange               <= jump or returnSignal or interruptay7aga;
-  jump                   <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) = "0011110") and outControl(2) = '1') or resetpipe2 = '1' else '0';
-  fetch_rst              <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' or inpPipe1(92) = '1' else outFetch;
-  resetpipe2             <= '1' when (zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(93) = '1') or rst = '1' else '0';
-  pcjump                 <= outMemory(31 downto 0)    when returnSignal = '1' or rst = '1' else
-                            outPipe2(31 downto 0)     when resetpipe2 = '1' else
-                            fullForward(63 downto 32) when jump = '1' else
+  stdcontrol(18 downto 0) <= outControl(18 downto 0) when stduse = '0' else outControl(18 downto 4) & '0' & outControl(2 downto 0);
+  loaduse1                <= inpPipe1 when stduse = '0' else outPipe1;
+  loaduse                 <= inpPipe2; --stduse = '0' else outPipe2;
+  loaduse3                <= inpPipe3; --stduse = '0' else outPipe3;
+  pcvalue                 <= outpc when outPipe1(92) = '0' else outPipe1(47 downto 16);
+  stduse                  <= '1' when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1' and inpPipe2(79) = '1' else '0';
+  pcinterrupt             <= flagout & outPipe3(27 downto 0) when outPipe3(92) = '1' else outPipe3(31 downto 0);
+  interruptay7aga         <= '1' when outPipe3(92) = '1' else '0';
+  inpPipe1(92)            <= '0' when outPipe4(92) = '1' and pcChange = '1' else Interrupt;
+  inpPipe2(92)            <= outPipe1(92);
+  inpPipe3(92)            <= outPipe2(92);
+  inpPipe4(92)            <= outPipe3(92);
+  inpPipe2(93)            <= outControl(19) when stduse = '0' else '0';
+  inpPipe3(93)            <= outPipe2(93);
+  inpPipe4(93)            <= outPipe3(93);
+  inpPipe2(91 downto 0)   <= stdcontrol & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
+  inpPipe3(91 downto 32)  <= outPipe2(91 downto 64) & outExcute(63 downto 32);
+  inpPipe3(31 downto 0)   <= inPortsig;
+  inpPipe4(91 downto 0)   <= outPipe3(91 downto 64) & outMemory;
+  inpPipe1(15 downto 0)   <= fetch_rst;
+  inpPipe1(47 downto 16)  <= outpc;
+  pcChange                <= jump or returnSignal or interruptay7aga;
+  jump                    <= '1' when ((outPipe1(15 downto 9) = "0011101" or outPipe1(15 downto 9) = "0011110") and outControl(2) = '1') or resetpipe2 = '1' else '0';
+  fetch_rst               <= "0000000000000000" when jump = '1' or resetpipe2 = '1' or returnDecode = '1' or returnExcute = '1' or returnSignal = '1' or inpPipe1(92) = '1' else outFetch;
+  resetpipe2              <= '1' when (zeroflagsig = '1' and outPipe2(75) = '1' and outPipe2(93) = '1') or rst = '1' else '0';
+  pcjump                  <= outMemory(31 downto 0)    when returnSignal = '1' or rst = '1' else
+                             outPipe2(31 downto 0)     when resetpipe2 = '1' else
+                             fullForward(63 downto 32) when jump = '1' else
                                                   (others => '0');
   returnDecode <= '1' when outPipe1(15 downto 12) = "0001" or outPipe1(92) = '1' else '0';
   returnExcute <= '1' when (outPipe2(82) = '1' and outPipe2(75) = '1') or outPipe2(92) = '1' else '0';
@@ -115,21 +123,21 @@ begin
     port map (
       clk  => clk,
       rst  => resetpipe2,
-      inp  => inpPipe1,
+      inp  => loaduse1,
       outp => outPipe1
     );
   pipe2: entity work.piplinereg
     port map (
       clk  => clk,
       rst  => rst,
-      inp  => inpPipe2,
+      inp  => loaduse,
       outp => outPipe2
     );
   pipe3: entity work.piplinereg
     port map (
       clk  => clk,
       rst  => rst,
-      inp  => inpPipe3,
+      inp  => loaduse3,
       outp => outPipe3
     );
   pipe4: entity work.piplinereg
