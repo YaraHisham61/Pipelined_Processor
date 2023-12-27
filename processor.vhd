@@ -41,25 +41,33 @@ architecture rtl of processor is
   signal flagout         : std_logic_vector(3 downto 0);
   signal resetpipe2      : std_logic                     := '0';
   signal interruptay7aga : std_logic                     := '0';
+  signal controlpipe1 : std_logic                     := '0';
+  signal pcuse : std_logic                     := '0';
+  signal stdflush : std_logic                     := '0';
   signal stduse          : std_logic                     := '0';
   signal pcjump          : std_logic_vector(31 downto 0);
   signal pcinterrupt     : std_logic_vector(31 downto 0) := (others => '0');
   signal fullForward     : std_logic_vector(63 downto 0);
 
 begin
-  stduse                 <= '1' when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1' else '0';
+  pcuse<='1' when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1'  and inpPipe3(74)='0')else'0';
+
+  stduse                 <= '1' when ((inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1'and inpPipe3(74)='0' )
+                          or ((inpPipe2(72 downto 70) = inpPipe4(69 downto 67) or inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(73) = '1' and inpPipe4(77) = '1'and inpPipe4(74)='0')
+                          else '0';
+  stdflush<='1' when((inpPipe2(72 downto 70) = inpPipe4(69 downto 67) or inpPipe4(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe4(73) = '1' and inpPipe4(77) = '1'and inpPipe4(74)='0')  else '0';
   pcinterrupt            <= flagout & outPipe3(27 downto 0) when outPipe3(92) = '1' else outPipe3(31 downto 0);
   interruptay7aga        <= '1' when outPipe3(92) = '1' else '0';
   inpPipe1(92)           <= '0' when outPipe4(92) = '1' and pcChange = '1' else Interrupt;
   inpPipe2(92)           <= outPipe1(92) when stduse = '0' else inpPipe2(92);
-  inpPipe3(92)           <= outPipe2(92);
+  inpPipe3(92)           <='0' when stdflush='1' else outPipe2(92);
   inpPipe4(92)           <= outPipe3(92);
   inpPipe2(93)           <= outControl(19) when stduse = '0' else inpPipe2(93);
-  inpPipe3(93)           <= outPipe2(93);
+  inpPipe3(93)           <= '0' when stdflush='1' else outPipe2(93);
   inpPipe4(93)           <= outPipe3(93);
-  inpPipe2(91 downto 0)  <= outControl(18 downto 0) & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
-  inpPipe3(91 downto 32) <= outPipe2(91 downto 64) & outExcute(63 downto 32);
-  inpPipe3(31 downto 0)  <= inPortsig;
+  inpPipe2(91 downto 0)  <=   outControl(18 downto 0) & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
+  inpPipe3(91 downto 32) <= (others=>'0') when stdflush='1' else outPipe2(91 downto 64) & outExcute(63 downto 32);
+  inpPipe3(31 downto 0)  <= (others=>'0') when stdflush='1' else inPortsig;
   inpPipe4(91 downto 0)  <= outPipe3(91 downto 64) & outMemory;
   inpPipe1(15 downto 0)  <= fetch_rst;
   inpPipe1(47 downto 16) <= outpc;
@@ -101,21 +109,24 @@ begin
                                outDecode(63 downto 32);
 
   FU: entity work.fetch_unit
-    port map (
+    port map(
       clk         => clk,
       rst         => '0',
       value       => pcjump,
       instruction => outFetch,
       valueEnable => pcChange,
       pcvalue     => outpc,
-      stduse      => stduse);
+      stdusepc      => pcuse);
+      controlpipe1<='0' when stduse='1' else clk;
   pipe1: entity work.piplinereg
     port map (
-      clk  => clk,
+      clk  => controlpipe1,
       rst  => resetpipe2,
       inp  => inpPipe1,
       outp => outPipe1
     );
+
+
   pipe2: entity work.piplinereg
     port map (
       clk  => clk,
@@ -123,6 +134,7 @@ begin
       inp  => inpPipe2,
       outp => outPipe2
     );
+
   pipe3: entity work.piplinereg
     port map (
       clk  => clk,
