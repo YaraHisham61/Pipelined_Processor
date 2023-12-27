@@ -44,17 +44,19 @@ architecture rtl of processor is
   signal stduse          : std_logic                     := '0';
   signal pcjump          : std_logic_vector(31 downto 0);
   signal pcinterrupt     : std_logic_vector(31 downto 0) := (others => '0');
+  signal pcvalue         : std_logic_vector(31 downto 0) := (others => '0');
   signal fullForward     : std_logic_vector(63 downto 0);
 
 begin
+  pcvalue                <= outpc when outPipe1(92) = '0' else outPipe1(47 downto 16);
   stduse                 <= '1' when (inpPipe3(72 downto 70) = inpPipe2(69 downto 67) or inpPipe3(72 downto 70) = inpPipe2(66 downto 64)) and inpPipe3(73) = '1' and inpPipe3(77) = '1' else '0';
   pcinterrupt            <= flagout & outPipe3(27 downto 0) when outPipe3(92) = '1' else outPipe3(31 downto 0);
   interruptay7aga        <= '1' when outPipe3(92) = '1' else '0';
   inpPipe1(92)           <= '0' when outPipe4(92) = '1' and pcChange = '1' else Interrupt;
-  inpPipe2(92)           <= outPipe1(92) when stduse = '0' else inpPipe2(92);
+  inpPipe2(92)           <= outPipe1(92);
   inpPipe3(92)           <= outPipe2(92);
   inpPipe4(92)           <= outPipe3(92);
-  inpPipe2(93)           <= outControl(19) when stduse = '0' else inpPipe2(93);
+  inpPipe2(93)           <= outControl(19);
   inpPipe3(93)           <= outPipe2(93);
   inpPipe4(93)           <= outPipe3(93);
   inpPipe2(91 downto 0)  <= outControl(18 downto 0) & outPipe1(8 downto 0) & fullForward when resetpipe2 = '0' else (others => '0');
@@ -141,7 +143,7 @@ begin
     port map (
       clk         => clk,
       rst         => rst,
-      pc          => outpc, --ret and call 
+      pc          => pcvalue, --ret and call 
       branch      => outControl(2),
       memwrite    => outControl(3),
       outDecode   => outDecode,

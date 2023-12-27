@@ -24,6 +24,7 @@ architecture rtl of fetch_unit is
   signal memLocation : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal pcstd       : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
   signal inputpc     : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+  signal pcin        : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 begin
   PC: entity work.pcPointer
     port map (
@@ -41,10 +42,11 @@ begin
                 reg     <= memLocation;
                 pcvalue <= memLocation;
                 pcstd   <= reg when stduse = '1' else reg + 1;
+                pcin    <= "0000" & value(27 downto 0);
   pcmux: entity work.mux_31x1
       port map (
       input_0 => pcstd,
-      input_1 => value,
+      input_1 => pcin,
       sel     => valueEnable,
       outMux  => inputpc
     );
