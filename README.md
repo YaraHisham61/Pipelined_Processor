@@ -5,6 +5,7 @@
 - [ISA](#isa)
 - [Control Signals](#cs)
 - [Contributors](#contributors)
+- [License](#license)
 
 
 ## <img src="https://github.com/AhmedSamy02/Adders-Mania/assets/88517271/9ed3ee67-0407-4c82-9e29-4faa76d1ac44" width="50" height="50" /> Overview <a name = "overview"></a>
@@ -101,7 +102,7 @@ When an interrupt occurs, the processor finishes the currently fetched instructi
 
 
   
-## <img src="https://github.com/YaraHisham61/OS_Scheduler/assets/88517271/859c6d0a-d951-4135-b420-6ca35c403803" width="50" height="50" /> Contributors <a name = "contributors"></a>
+## <img src="https://github.com/YaraHisham61/OS_Scheduler/assets/88517271/859c6d0a-d951-4135-b420-6ca35c403803" width="60" height="60" /> Contributors <a name = "contributors"></a>
 <table>
   <tr>
    <td align="center">
@@ -130,3 +131,6 @@ When an interrupt occurs, the processor finishes the currently fetched instructi
     </td>
   </tr>
  </table>
+
+ ## <img src="https://github.com/YaraHisham61/Architecture_Project/assets/88517271/c4a8b264-bf74-4f14-ba2a-b017ef999151" width="50" height="50" /> License <a name = "license"></a>
+> This software is licensed under MIT License, See [License](https://github.com/YaraHisham61/Architecture_Project/blob/master/LICENSE)
