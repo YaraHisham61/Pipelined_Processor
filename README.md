@@ -13,7 +13,7 @@ The processor in this project has a RISC-like instruction set architecture. Ther
 
 When an interrupt occurs, the processor finishes the currently fetched instructions (instructions that have already entered the pipeline), then the address of the next instruction (in PC) is saved on top of the stack, and the PC is loaded from address [2-3] of the memory (the address takes two words). To return from an interrupt, an RTI instruction loads the PC from the top of the stack, and the flow of the program resumes from the instruction after the interrupted instruction.
 
-## <img src="https://github.com/YaraHisham61/OS_Scheduler/assets/88517271/52e64c12-9638-45ba-9040-d6545e67a1df" width="50" height="50" /> Design <a name = "des"></a>
+## <img src="https://github.com/YaraHisham61/OS_Scheduler/assets/88517271/41cd74fb-7e37-492e-b15d-5f54bccfd43e" width="50" height="50" /> Design <a name = "des"></a>
 ![image](https://github.com/YaraHisham61/Architecture_Project/assets/88517271/e8f7adfd-3df4-4438-931e-103b67efc4b6)
 ## <img src="https://github.com/YaraHisham61/Architecture_Project/assets/88517271/d375f35d-9e7d-474f-96ce-a51c610a9f31" width="50" height="50" /> ISA <a name = "isa"></a>
 
