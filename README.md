@@ -117,10 +117,11 @@ When an interrupt occurs, the processor finishes the currently fetched instructi
     <br />
     <sub><b>Kareem Samy</b></sub></a>
     </td>
+    
    <td align="center">
     <a href="https://github.com/nancyalgazzar" target="_black">
     <img src="https://avatars.githubusercontent.com/u/94644017?v=4" width="150px;" alt="Nancy Ayman"/>
-    < br/>
+    <br />
     <sub><b>Nancy Ayman</b></sub></a>
     </td>
    <td align="center">
